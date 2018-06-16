@@ -1,0 +1,19 @@
+{
+  "title": "Gitbook演示",
+  "description": "用于演示如何创建一个自己的Gitbook",
+  "pluginsConfig": {
+    "github-buttons": {
+      "buttons": [
+        {
+          "repo": "gitbook_demo"
+        }
+      ]
+    },
+    "sitemap-general": {
+      "prefix": "https://book.crifan.com/gitbook/gitbook_demo/website/"
+    },
+    "toolbar-button": {
+      "url": "http://book.crifan.com/books/gitbook_demo/pdf/gitbook_demo.pdf"
+    }
+  }
+}

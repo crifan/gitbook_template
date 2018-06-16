@@ -1,0 +1,10 @@
+# gitbook installed plugins
+node_modules/
+
+# gitbook_demo generated folders
+gitbook_demo/node_modules/
+gitbook_demo/output/
+gitbook_demo/debug/
+
+# other zip files
+*.zip
