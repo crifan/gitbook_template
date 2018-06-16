@@ -15,7 +15,9 @@
 
 * [crifan/gitbook_demo: Gitbook演示](https://github.com/crifan/gitbook_template)
 
-如何关于使用此Gitbook源码去生成发布为电子书，详见：[crifan/gitbook_template: demo how to use crifan gitbook template and demo](https://github.com/crifan/gitbook_template)
+#### 如何使用此Gitbook源码去生成发布为电子书
+
+详见：[crifan/gitbook_template: 演示如何使用crifan的gitbook的模板去创建自己的gitbook电子书](https://github.com/crifan/gitbook_template)
 
 ### 在线浏览
 

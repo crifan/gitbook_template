@@ -1,5 +1,8 @@
 # Gitbook演示
 
+* 最新版本：`v1.0`
+* 更新时间：`20180616`
+
 ## 简介
 
 `crifan`的`Gitbook`模版，用于演示如何创建一个自己的`Gitbook`
@@ -11,6 +14,10 @@
 ### Gitook源码
 
 * [crifan/gitbook_demo: Gitbook演示](https://github.com/crifan/gitbook_template)
+
+#### 如何使用此Gitbook源码去生成发布为电子书
+
+详见：[crifan/gitbook_template: 演示如何使用crifan的gitbook的模板去创建自己的gitbook电子书](https://github.com/crifan/gitbook_template)
 
 ### 在线浏览
 
