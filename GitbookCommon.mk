@@ -22,7 +22,7 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20180615
+Version=20180620
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to github io repo
 RunHelp = Run 'make help' to see usage
 $(info --------------------------------------------------------------------------------)
@@ -167,13 +167,20 @@ clean_all: clean_generated_book_json clean_website clean_pdf clean_epub clean_mo
 # Gitbook init
 ################################################################################
 
-## gitbook install plugins
+## gitbook init to install plugins
 init: generate_book_json
 	gitbook install
+
+## gitbook install plugins
+install: generate_book_json init
+	@echo Has installed all gitbook plugins
 
 ################################################################################
 # Generate Files
 ################################################################################
+
+GITBOOK_BUILD_FLAGS= --timing
+GITBOOK_COMMON_FLAGS= --log debug
 
 ## Generate book.json from ../book_common.json and book_current.json
 generate_book_json: clean_generated_book_json
@@ -181,31 +188,31 @@ generate_book_json: clean_generated_book_json
 
 ## Debug gitbook
 debug: generate_book_json clean_debug create_folder_debug
-	gitbook serve $(CURRENT_DIR) $(DEBUG_PATH)
+	gitbook serve $(CURRENT_DIR) $(DEBUG_PATH) $(GITBOOK_COMMON_FLAGS)
 
 ## Generate gitbook website
 website: generate_book_json clean_website create_folder_website
 	@echo ================================================================================
 	@echo Generate website for $(BOOK_NAME)
-	gitbook build $(CURRENT_DIR) $(WEBSITE_FULLNAME)
+	gitbook build $(CURRENT_DIR) $(WEBSITE_FULLNAME) $(GITBOOK_COMMON_FLAGS) $(GITBOOK_BUILD_FLAGS)
 
 ## Generate PDF file
 pdf: generate_book_json clean_pdf create_folder_pdf
 	@echo ================================================================================
 	@echo Generate PDF for $(BOOK_NAME)
-	gitbook pdf $(CURRENT_DIR) $(PDF_FULLNAME)
+	gitbook pdf $(CURRENT_DIR) $(PDF_FULLNAME) $(GITBOOK_COMMON_FLAGS)
 
 ## Generate ePub file
 epub: generate_book_json clean_epub create_folder_epub
 	@echo ================================================================================
 	@echo Generate ePub for $(BOOK_NAME)
-	gitbook epub $(CURRENT_DIR) $(EPUB_FULLNAME)
+	gitbook epub $(CURRENT_DIR) $(EPUB_FULLNAME) $(GITBOOK_COMMON_FLAGS)
 
 ## Generate Mobi file
 mobi: generate_book_json clean_mobi create_folder_mobi
 	@echo ================================================================================
 	@echo Generate Mobi for $(BOOK_NAME)
-	gitbook mobi $(CURRENT_DIR) $(MOBI_FULLNAME)
+	gitbook mobi $(CURRENT_DIR) $(MOBI_FULLNAME) $(GITBOOK_COMMON_FLAGS)
 
 ## Generate all files: website/pdf/epub/mobi
 all: website pdf epub mobi

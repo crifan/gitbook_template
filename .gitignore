@@ -6,5 +6,7 @@ gitbook_demo/node_modules/
 gitbook_demo/output/
 gitbook_demo/debug/
 
+gitbook_demo/book.json
+
 # other zip files
 *.zip
