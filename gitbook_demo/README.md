@@ -11,7 +11,7 @@
 
 本书的各种源码、在线浏览地址、多种格式文件下载如下：
 
-### Gitook源码
+### Gitbook源码
 
 * [crifan/gitbook_demo: Gitbook演示](https://github.com/crifan/gitbook_template)
 

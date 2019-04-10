@@ -22,7 +22,7 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20180620
+Version=20190410
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to github io repo
 RunHelp = Run 'make help' to see usage
 $(info --------------------------------------------------------------------------------)
@@ -42,6 +42,7 @@ $(eval MAKEFILE_DIR_NOSLASH = $(MAKEFILE_DIR_PATSUBST))
 $(eval CURRENT_DIR_WITH_SLASH = $(MAKEFILE_DIR))
 $(eval CURRENT_DIR = $(MAKEFILE_DIR_NOSLASH))
 $(eval CURRENT_DIR_NAME := $(notdir $(MAKEFILE_DIR_PATSUBST)))
+$(eval GITBOOK_ROOT := $(abspath $(CURRENT_DIR)/..))
 
 $(info CURRENT_DIR=$(CURRENT_DIR))
 endef
@@ -164,15 +165,31 @@ clean_mobi:
 clean_all: clean_generated_book_json clean_website clean_pdf clean_epub clean_mobi
 
 ################################################################################
-# Gitbook init
+# Gitbook Init / Preparation
 ################################################################################
 
+## copy README.md to ./src
+copy_readme:
+	cp README.md ./src/README.md
+
+## copy common .gitignore
+copy_gitignore:
+	cp ../gitignore_common .gitignore
+
+## Generate book.json from ../book_common.json and book_current.json
+generate_book_json: clean_generated_book_json
+	@python  ../generateBookJson.py
+
+## sync content
+sync_content: generate_book_json copy_readme copy_gitignore
+	@echo Complete sync content
+
 ## gitbook init to install plugins
-init: generate_book_json
+init: sync_content
 	gitbook install
 
 ## gitbook install plugins
-install: generate_book_json init
+install: sync_content init
 	@echo Has installed all gitbook plugins
 
 ################################################################################
@@ -182,34 +199,30 @@ install: generate_book_json init
 GITBOOK_BUILD_FLAGS= --timing
 GITBOOK_COMMON_FLAGS= --log debug
 
-## Generate book.json from ../book_common.json and book_current.json
-generate_book_json: clean_generated_book_json
-	@python  ../generateBookJson.py
-
 ## Debug gitbook
-debug: generate_book_json clean_debug create_folder_debug
+debug: sync_content clean_debug create_folder_debug
 	gitbook serve $(CURRENT_DIR) $(DEBUG_PATH) $(GITBOOK_COMMON_FLAGS)
 
 ## Generate gitbook website
-website: generate_book_json clean_website create_folder_website
+website: sync_content clean_website create_folder_website
 	@echo ================================================================================
 	@echo Generate website for $(BOOK_NAME)
 	gitbook build $(CURRENT_DIR) $(WEBSITE_FULLNAME) $(GITBOOK_COMMON_FLAGS) $(GITBOOK_BUILD_FLAGS)
 
 ## Generate PDF file
-pdf: generate_book_json clean_pdf create_folder_pdf
+pdf: sync_content clean_pdf create_folder_pdf
 	@echo ================================================================================
 	@echo Generate PDF for $(BOOK_NAME)
 	gitbook pdf $(CURRENT_DIR) $(PDF_FULLNAME) $(GITBOOK_COMMON_FLAGS)
 
 ## Generate ePub file
-epub: generate_book_json clean_epub create_folder_epub
+epub: sync_content clean_epub create_folder_epub
 	@echo ================================================================================
 	@echo Generate ePub for $(BOOK_NAME)
 	gitbook epub $(CURRENT_DIR) $(EPUB_FULLNAME) $(GITBOOK_COMMON_FLAGS)
 
 ## Generate Mobi file
-mobi: generate_book_json clean_mobi create_folder_mobi
+mobi: sync_content clean_mobi create_folder_mobi
 	@echo ================================================================================
 	@echo Generate Mobi for $(BOOK_NAME)
 	gitbook mobi $(CURRENT_DIR) $(MOBI_FULLNAME) $(GITBOOK_COMMON_FLAGS)
@@ -236,16 +249,47 @@ all: website pdf epub mobi
 ################################################################################
 PASSWORD_FILE=../sshpass_password.txt
 REMOTE_USER=root
-REMOTE_SERVER=80.85.87.205
-REMOTE_BOOKS_PATH=/home/wwwroot/book.crifan.com/books
+# REMOTE_SERVER=80.85.87.205
+REMOTE_SERVER=150.109.113.228
+REMOTE_BOOKS_PATH=/data/wwwroot/book.crifan.com/books
 # REMOTE_PATH=$(REMOTE_BOOKS_PATH)/$(BOOK_NAME)
 REMOTE_PATH=$(REMOTE_BOOKS_PATH)
+
+
+DEPLOY_IGNORE_FILE = $(GITBOOK_ROOT)/deploy_ignore_book_crifan_com.txt
+# $(info DEPLOY_IGNORE_FILE=$(DEPLOY_IGNORE_FILE))
+
+SHOULD_IGNORE = false
+
+# ifneq ("$(wildcard $(DEPLOY_IGNORE_FILE))", "")
+ifneq ($(wildcard $(DEPLOY_IGNORE_FILE)), )
+# $(info $(DEPLOY_IGNORE_FILE) is exist, not empty)
+IGNORE_FILE_CONTENT := $(shell cat $(DEPLOY_IGNORE_FILE))
+# IGNORE_FILE_CONTENT := $(file < $(DEPLOY_IGNORE_FILE))
+
+FOUND_BOOK := $(findstring $(BOOK_NAME), $(IGNORE_FILE_CONTENT))
+# $(info FOUND_BOOK=$(FOUND_BOOK))
+
+# ifeq ("$(FOUND_BOOK)", "")
+ifeq ($(FOUND_BOOK), )
+$(info NOT found $(BOOK_NAME) in $(IGNORE_FILE_CONTENT))
+SHOULD_IGNORE = false
+else
+$(info IS found $(BOOK_NAME) in $(IGNORE_FILE_CONTENT))
+SHOULD_IGNORE = true
+endif
+
+endif
 
 ## Upload all genereted website/pdf/epub/mobi files to remote server using rsync. Create sshpass_password.txt file to contain password before use this
 upload: all
 	@echo ================================================================================
+ifeq ($(SHOULD_IGNORE), true)
+	@echo Ignore upload $(BOOK_NAME) to book.crifan.com
+else
 	@echo Upload for $(BOOK_NAME)
 	sshpass -f $(PASSWORD_FILE) rsync -avzh --progress --stats --delete --force $(OUTPUT_PATH) $(REMOTE_USER)@$(REMOTE_SERVER):$(REMOTE_PATH)
+endif
 
 
 ################################################################################

@@ -1,5 +1,7 @@
 # Gitbook模板
 
+最后更新：`v20190410`
+
 ## 项目代码仓库
 
 [https://github.com/crifan/gitbook_template](https://github.com/crifan/gitbook_template) 
