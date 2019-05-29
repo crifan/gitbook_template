@@ -1,3 +1,6 @@
+-include ../DeployServerInfo.mk
+# sinclude ../DeployServerInfo.mk
+
 ################################################################################
 # Global defines
 ################################################################################
@@ -22,7 +25,7 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20190410
+Version=20190529
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to github io repo
 RunHelp = Run 'make help' to see usage
 $(info --------------------------------------------------------------------------------)
@@ -76,12 +79,19 @@ MOBI_FULLNAME = $(MOBI_PATH)/$(MOBI_NAME)
 .DEFAULT_GOAL := deploy
 
 .PHONY : debug_makefile
-.PHONY : debug_dir debug_python debug
+.PHONY : debug_dir debug_python debug debug_inlcude
 .PHONY : help
 .PHONY : create_folder_all create_folder_website create_folder_pdf create_folder_epub create_folder_mobi
 .PHONY : clean_all clean_website clean_pdf clean_epub clean_mobi
 .PHONY : all website pdf epub mobi
 .PHONY : upload commit deploy
+
+## Debug include file
+debug_include:
+	@echo DEPLOY_SERVER_USER=$(DEPLOY_SERVER_USER)
+	@echo DEPLOY_SERVER_IP=$(DEPLOY_SERVER_IP)
+	@echo DEPLOY_SERVER_PATH=$(DEPLOY_SERVER_PATH)
+	@echo DEPLOY_SERVER_PASSWORD=******
 
 ## Print current directory related info
 debug_dir:
@@ -137,6 +147,11 @@ create_folder_all: create_folder_website create_folder_pdf create_folder_epub cr
 # Clean
 ################################################################################
 
+
+## Clean generated README.md file
+clean_generated_readme_md:
+	-rm -f README.md
+
 ## Clean generated book.json file
 clean_generated_book_json:
 	-rm -f book.json
@@ -168,6 +183,10 @@ clean_all: clean_generated_book_json clean_website clean_pdf clean_epub clean_mo
 # Gitbook Init / Preparation
 ################################################################################
 
+## Generate README.md from ../README_template.md and README_current.json
+generate_readme_md: clean_generated_readme_md
+	@python  ../generateReadmeMd.py
+
 ## copy README.md to ./src
 copy_readme:
 	cp README.md ./src/README.md
@@ -178,10 +197,10 @@ copy_gitignore:
 
 ## Generate book.json from ../book_common.json and book_current.json
 generate_book_json: clean_generated_book_json
-	@python  ../generateBookJson.py
+	@python ../generateBookJson.py
 
 ## sync content
-sync_content: generate_book_json copy_readme copy_gitignore
+sync_content: generate_book_json generate_readme_md copy_readme copy_gitignore
 	@echo Complete sync content
 
 ## gitbook init to install plugins
@@ -247,16 +266,8 @@ all: website pdf epub mobi
 ################################################################################
 # Upload to server
 ################################################################################
-PASSWORD_FILE=../sshpass_password.txt
-REMOTE_USER=root
-# REMOTE_SERVER=80.85.87.205
-REMOTE_SERVER=150.109.113.228
-REMOTE_BOOKS_PATH=/data/wwwroot/book.crifan.com/books
-# REMOTE_PATH=$(REMOTE_BOOKS_PATH)/$(BOOK_NAME)
-REMOTE_PATH=$(REMOTE_BOOKS_PATH)
 
-
-DEPLOY_IGNORE_FILE = $(GITBOOK_ROOT)/deploy_ignore_book_crifan_com.txt
+DEPLOY_IGNORE_FILE = $(GITBOOK_ROOT)/deploy_ignore_book_list.txt
 # $(info DEPLOY_IGNORE_FILE=$(DEPLOY_IGNORE_FILE))
 
 SHOULD_IGNORE = false
@@ -272,7 +283,7 @@ FOUND_BOOK := $(findstring $(BOOK_NAME), $(IGNORE_FILE_CONTENT))
 
 # ifeq ("$(FOUND_BOOK)", "")
 ifeq ($(FOUND_BOOK), )
-$(info NOT found $(BOOK_NAME) in $(IGNORE_FILE_CONTENT))
+$(info NOT found $(BOOK_NAME) in IGNORE_FILE_CONTENT=$(IGNORE_FILE_CONTENT))
 SHOULD_IGNORE = false
 else
 $(info IS found $(BOOK_NAME) in $(IGNORE_FILE_CONTENT))
@@ -281,14 +292,14 @@ endif
 
 endif
 
-## Upload all genereted website/pdf/epub/mobi files to remote server using rsync. Create sshpass_password.txt file to contain password before use this
+## Upload all genereted website/pdf/epub/mobi files to remote server using rsync. Create DeployServerInfo.mk which contain deploy server IP+User+Password+Path before use this
 upload: all
 	@echo ================================================================================
 ifeq ($(SHOULD_IGNORE), true)
 	@echo Ignore upload $(BOOK_NAME) to book.crifan.com
 else
 	@echo Upload for $(BOOK_NAME)
-	sshpass -f $(PASSWORD_FILE) rsync -avzh --progress --stats --delete --force $(OUTPUT_PATH) $(REMOTE_USER)@$(REMOTE_SERVER):$(REMOTE_PATH)
+	sshpass -p $(DEPLOY_SERVER_PASSWORD) rsync -avzh --progress --stats --delete --force $(OUTPUT_PATH) $(DEPLOY_SERVER_USER)@$(DEPLOY_SERVER_IP):$(DEPLOY_SERVER_PATH)
 endif
 
 

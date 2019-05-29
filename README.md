@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`v20190410`
+最后更新：`v20190529`
 
 ## 项目代码仓库
 
@@ -13,17 +13,18 @@
 
 此项目主要包括：
 
-* `工具`：主要是自己写的`Makefile`，用于自动化`gitbook`的`调试`、`编译`、`提交`、`部署`等一系列过程
+* `工具`：主要是自己写的`Makefile`，用于自动化`gitbook`的`初始化`、`调试`、`编译`、`提交`、`部署`等一系列过程
 * `gitbook`的demo源码：写了个gitbook的demo的源码，供参考使用，用于创建一个自己的gitbook
 
 ## 为何会有这个模板？
 
-主要是之前自己用`Gitbook`创建了很多个`book`，然后就有了把共同部分提取出来的需求，以避免，一旦公共部分改动，就要手动的去更改每个`book`的相关文件，比如`book.json`，`Makefile`。
+主要是之前自己用`Gitbook`创建了很多个`book`，然后就有了把共同部分提取出来的需求，以避免，一旦公共部分改动，就要手动的去更改每个`book`的相关文件，比如`book.json`，`Makefile`，`README.md`。
 
 详见：
 
 * [【已解决】提取Gitbook中Makefile公共部分](http://www.crifan.com/gitbook_extract_common_part_of_makefile)
 * [【已解决】gitbook中book.json中能否把公共部分提取出来](http://www.crifan.com/gitbook_extract_book_json_common_part)
+* [【基本解决】Makefile中从独立文件比如json中读取配置变量](http://www.crifan.com/makefile_import_read_config_variable_from_file_like_json)
 
 ## 使用步骤
 
@@ -88,7 +89,6 @@ make all
 
 ![gitbook生成各种文件到output文件夹中](img/gitbook_generated_all_files_to_ouput_folder.png)
 
-
 ### 提交`commit`+部署`deploy`
 
 当`book`编写完毕，则可以去提交（git源码）并部署（把生成的`html`、`pdf`、`mobi`等文件上传）到自己的服务器上了
@@ -111,17 +111,52 @@ GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
 
 #### 对于`deploy`
 
-* `服务器账号`+`服务器IP`+`文件上传路径`：修改`GitbookCommon.mk`中的配置：
+* `服务器账号`+`服务器密码`+`服务器IP`+`文件上传路径`：修改`DeployServerInfo.mk`中的配置：
 
 ```make
-REMOTE_USER=root
-REMOTE_SERVER=80.85.87.205
-REMOTE_BOOKS_PATH=/home/wwwroot/book.crifan.com/books
+DEPLOY_SERVER_IP=change_to_your_server_ip
+DEPLOY_SERVER_USER=change_to_your_server_user
+DEPLOY_SERVER_PASSWORD=change_to_your_server_password
+DEPLOY_SERVER_PATH=change_to_your_server_path
 ```
 
-* `服务器密码`：把文件`sshpass_password.txt`中的内容改为你的服务器的密码
+比如我的是：
+
+```make
+DEPLOY_SERVER_IP=149.28.136.189
+DEPLOY_SERVER_USER=root
+DEPLOY_SERVER_PASSWORD=xxxxxx
+DEPLOY_SERVER_PATH=/data/wwwroot/book.crifan.com/books
+```
+
+##### DEPLOY_SERVER_PASSWORD如包含特殊字符需要转义
+
+如果你的密码`DEPLOY_SERVER_PASSWORD`中包含特殊字符，比如：
+
+* 左括号：`)`
+* 井号：`#`
+* 问号：`?`
+
+等，需要用反斜杠去`\`转义，比如：
+
+`DEPLOY_SERVER_PASSWORD=xxx)xx#xx?x`
+
+需要写成：
+
+`DEPLOY_SERVER_PASSWORD=xxx\)xx\#xx\?x`
 
 ## 其他说明
+
+### 想要部署时忽略多个book中的某个book
+
+如果你和我一样（实际上很少人会有这种）有个特殊需求，有多个book，想要在`make deploy`时，忽略某个book，则可以去：
+
+和`GitbookCommon.mk`同级目录中新建`deploy_ignore_book_list.txt`，然后加上要忽略部署上传的book，比如：
+
+```bash
+scientific_network_summary
+
+```
 
 ### 此处的`book.json`是合并生成的
 
@@ -140,6 +175,22 @@ REMOTE_BOOKS_PATH=/home/wwwroot/book.crifan.com/books
 `make generate_book_json`
 
 即可。
+
+### 此处的`REAMDME.md`是合并生成的
+
+此处的`README.md`是通过`Makefile`中的`generate_readme_md`调用`../generateReadmeMd.py`去从自己的`README_current.json`加上模板`README_template.md`去生成的。
+
+而此处，无需自己去单独生成，因为相关的命令，比如：
+
+* `make init`
+* `make debug`
+* `make all`
+
+内部会自动（依赖）调用`generate_readme_md`去生成`README.md`的。
+
+当然，如果自己想要单独去生成`README.md`，也可以自己调用
+
+`make generate_readme_md`
 
 ### `make clean_all`
 
@@ -170,12 +221,13 @@ rm -rf /Users/crifan/dev/dev_root/gitbook/GitbookTemplate/gitbook_template/gitbo
 ➜  gitbook_demo git:(master) ✗ make help
 --------------------------------------------------------------------------------
 Author  : crifan.com
-Version : 20180615
+Version : 20190528
 Function: Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to github io repo
-		Run 'make help' to see usage
+                Run 'make help' to see usage
 --------------------------------------------------------------------------------
-CURRENT_DIR=/Users/crifan/dev/dev_root/gitbook/GitbookTemplate/gitbook_template/gitbook_demo
+CURRENT_DIR=/Users/crifan/dev/dev_root/gitbook/gitbook_src_root/gitbook_demo
 BOOK_NAME=gitbook_demo
+NOT found gitbook_demo in IGNORE_FILE_CONTENT=scientific_network_summary
 
 Usage:
   make <target>
@@ -183,6 +235,7 @@ Usage:
 Defaul Target: deploy
 
 Targets:
+  debug_include             Debug include file
   debug_dir                 Print current directory related info
   debug_python              Debug for makefile call python
   create_folder_debug       Create folder for gitbook local debug
@@ -191,6 +244,7 @@ Targets:
   create_folder_epub        Create folder for epub
   create_folder_mobi        Create folder for mobi
   create_folder_all         Create folder for all: website/pdf/epub/mobi
+  clean_generated_readme_md Clean generated README.md file
   clean_generated_book_json Clean generated book.json file
   clean_debug               Clean gitbook debug
   clean_website             Clean generated gitbook website whole folder
@@ -198,15 +252,20 @@ Targets:
   clean_epub                Clean generated ePub file and whole folder
   clean_mobi                Clean generated Mobi file and whole folder
   clean_all                 Clean all generated files
-  init                      gitbook install plugins
+  generate_readme_md        Generate README.md from ../README_template.md and README_current.json
+  copy_readme               copy README.md to ./src
+  copy_gitignore            copy common .gitignore
   generate_book_json        Generate book.json from ../book_common.json and book_current.json
+  sync_content              sync content
+  init                      gitbook init to install plugins
+  install                   gitbook install plugins
   debug                     Debug gitbook
   website                   Generate gitbook website
   pdf                       Generate PDF file
   epub                      Generate ePub file
   mobi                      Generate Mobi file
   all                       Generate all files: website/pdf/epub/mobi
-  upload                    Upload all genereted website/pdf/epub/mobi files to remote server using rsync. Create sshpass_password.txt file to contain password before use this
+  upload                    Upload all genereted website/pdf/epub/mobi files to remote server using rsync. Create DeployServerInfo.mk which contain deploy server IP+User+Password+Path before use this
   commit                    Commit generated files to github io
   deploy                    Deploy = upload and commit for generated files
   help                      Show help
