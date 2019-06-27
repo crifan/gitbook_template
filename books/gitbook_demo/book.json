@@ -1,5 +1,5 @@
 {
-  "description": "用于演示如何创建一个自己的Gitbook", 
+  "description": "用于演示如何用Gitbook创建自己的book电子书", 
   "links": {
     "sidebar": {
       "主页": "http://www.crifan.com"
@@ -11,6 +11,7 @@
   "language": "zh-hans", 
   "plugins": [
     "theme-comscore", 
+    "anchors", 
     "-lunr", 
     "-search", 
     "search-plus", 
@@ -79,8 +80,8 @@
     }, 
     "tbfed-pagefooter": {
       "modify_format": "YYYY-MM-DD HH:mm:ss", 
-      "modify_label": "该文件修订时间：", 
-      "copyright": "crifan.com，使用<a href='https://creativecommons.org/licenses/by-sa/4.0/deed.zh'>知识署名-相同方式共享4.0协议</a>发布"
+      "modify_label": "最后更新：", 
+      "copyright": "crifan.com，使用<a href='https://creativecommons.org/licenses/by/4.0/deed.zh'>署名4.0国际(CC BY 4.0)协议</a>发布"
     }, 
     "github-buttons": {
       "buttons": [

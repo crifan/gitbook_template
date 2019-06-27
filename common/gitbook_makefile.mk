@@ -1,9 +1,24 @@
--include ../DeployServerInfo.mk
-# sinclude ../DeployServerInfo.mk
+-include ../../common/config/deploy/deploy_server_info.mk
+
+################################################################################
+# Global Config
+################################################################################
+
+# if need commit, change these to yours
+GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
+
+# if need upload/deploy, update content of these file
+DEPLOY_SERVER_PASSWORD_FILE=$(GITBOOK_ROOT_COMMON)/config/deploy/deploy_server_password.txt
+DEPLOY_IGNORE_FILE=$(GITBOOK_ROOT_COMMON)/config/deploy/deploy_ignore_book_list.txt
+
+COMMON_GITIGNORE_FILE=$(GITBOOK_ROOT_COMMON)/config/common/common_gitignore
 
 ################################################################################
 # Global defines
 ################################################################################
+
+GENERATE_BOOK_JSON_FILE=$(GITBOOK_ROOT_COMMON)/tools/generate_book_json.py
+GENERATE_README_MD_FILE=$(GITBOOK_ROOT_COMMON)/tools/generate_readme_md.py
 
 # COLORS
 GREEN  := $(shell tput -Txterm setaf 2)
@@ -25,7 +40,7 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20190529
+Version=20190627
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to github io repo
 RunHelp = Run 'make help' to see usage
 $(info --------------------------------------------------------------------------------)
@@ -45,7 +60,10 @@ $(eval MAKEFILE_DIR_NOSLASH = $(MAKEFILE_DIR_PATSUBST))
 $(eval CURRENT_DIR_WITH_SLASH = $(MAKEFILE_DIR))
 $(eval CURRENT_DIR = $(MAKEFILE_DIR_NOSLASH))
 $(eval CURRENT_DIR_NAME := $(notdir $(MAKEFILE_DIR_PATSUBST)))
-$(eval GITBOOK_ROOT := $(abspath $(CURRENT_DIR)/..))
+$(eval GITBOOK_ROOT := $(abspath $(CURRENT_DIR)/../..))
+$(eval GITBOOK_ROOT_BOOKS := $(abspath $(GITBOOK_ROOT)/books))
+$(eval GITBOOK_ROOT_COMMON := $(abspath $(GITBOOK_ROOT)/common))
+$(eval GITBOOK_ROOT_GENERATED := $(abspath $(GITBOOK_ROOT)/generated))
 
 $(info CURRENT_DIR=$(CURRENT_DIR))
 endef
@@ -56,14 +74,16 @@ $(eval $(call getCurrentDirAndDirName))
 BOOK_NAME := $(CURRENT_DIR_NAME)
 $(info BOOK_NAME=$(BOOK_NAME))
 
-OUTPUT_FOLDER_NAME = output
-OUTPUT_PATH = $(CURRENT_DIR)/$(OUTPUT_FOLDER_NAME)/$(BOOK_NAME)
-DEBUG_PATH = $(CURRENT_DIR)/debug
+RELEASE_FOLDER_NAME = release
+DEBUG_FOLDER_NAME = debug
+CURRENT_BOOK_GENERATED=$(GITBOOK_ROOT)/generated/books/$(BOOK_NAME)
+RELEASE_PATH = $(CURRENT_BOOK_GENERATED)/$(RELEASE_FOLDER_NAME)/$(BOOK_NAME)
+DEBUG_PATH = $(CURRENT_BOOK_GENERATED)/$(DEBUG_FOLDER_NAME)
 
-WEBSITE_PATH = $(OUTPUT_PATH)/website
-PDF_PATH = $(OUTPUT_PATH)/pdf
-EPUB_PATH = $(OUTPUT_PATH)/epub
-MOBI_PATH = $(OUTPUT_PATH)/mobi
+WEBSITE_PATH = $(RELEASE_PATH)/website
+PDF_PATH = $(RELEASE_PATH)/pdf
+EPUB_PATH = $(RELEASE_PATH)/epub
+MOBI_PATH = $(RELEASE_PATH)/mobi
 
 PDF_NAME = $(BOOK_NAME).pdf
 EPUB_NAME = $(BOOK_NAME).epub
@@ -91,7 +111,7 @@ debug_include:
 	@echo DEPLOY_SERVER_USER=$(DEPLOY_SERVER_USER)
 	@echo DEPLOY_SERVER_IP=$(DEPLOY_SERVER_IP)
 	@echo DEPLOY_SERVER_PATH=$(DEPLOY_SERVER_PATH)
-	@echo DEPLOY_SERVER_PASSWORD=******
+	@echo DEPLOY_SERVER_PASSWORD_FILE=$(DEPLOY_SERVER_PASSWORD_FILE)
 
 ## Print current directory related info
 debug_dir:
@@ -106,7 +126,11 @@ debug_dir:
 	@echo CURRENT_DIR=$(CURRENT_DIR)
 	@echo CURRENT_DIR_NAME=$(CURRENT_DIR_NAME)
 	@echo BOOK_NAME=$(BOOK_NAME)
-	@echo OUTPUT_PATH=$(OUTPUT_PATH)
+	@echo GITBOOK_ROOT=$(GITBOOK_ROOT)
+	@echo GITBOOK_ROOT_BOOKS=$(GITBOOK_ROOT_BOOKS)
+	@echo GITBOOK_ROOT_COMMON=$(GITBOOK_ROOT_COMMON)
+	@echo GITBOOK_ROOT_GENERATED=$(GITBOOK_ROOT_GENERATED)
+	@echo RELEASE_PATH=$(RELEASE_PATH)
 	@echo WEBSITE_PATH=$(WEBSITE_PATH)
 	@echo WEBSITE_FULLNAME=$(WEBSITE_FULLNAME)
 	@echo PDF_PATH=$(PDF_PATH)
@@ -114,7 +138,7 @@ debug_dir:
 
 ## Debug for makefile call python
 debug_python:
-	@python ../generateBookJson.py
+	@python $(GENERATE_BOOK_JSON_FILE)
 
 ################################################################################
 # Create folder
@@ -123,6 +147,10 @@ debug_python:
 ## Create folder for gitbook local debug
 create_folder_debug: 
 	mkdir -p $(DEBUG_PATH)
+
+## Create folder for gitbook release: website+pdf+epub+mobi
+create_folder_release: 
+	mkdir -p $(RELEASE_PATH)
 
 ## Create folder for gitbook website
 create_folder_website: 
@@ -140,21 +168,30 @@ create_folder_epub:
 create_folder_mobi: 
 	mkdir -p $(MOBI_PATH)
 
-## Create folder for all: website/pdf/epub/mobi
-create_folder_all: create_folder_website create_folder_pdf create_folder_epub create_folder_mobi
+## Create folder for all: debug+release(website/pdf/epub/mobi)
+create_folder_all: create_folder_debug create_folder_release create_folder_website create_folder_pdf create_folder_epub create_folder_mobi
 
 ################################################################################
 # Clean
 ################################################################################
 
+## Clean generated book.json file
+clean_generated_book_json:
+	-rm -f book.json
 
 ## Clean generated README.md file
 clean_generated_readme_md:
 	-rm -f README.md
 
-## Clean generated book.json file
-clean_generated_book_json:
-	-rm -f book.json
+## Clean copied .gitignore
+clean_gitignore:
+	-rm -f .gitignore
+
+## Clean generated all files
+clean_generated_all: clean_gitignore clean_generated_readme_md clean_generated_book_json
+	@echo Completed clean all generated
+
+# ------------------------------------------------
 
 ## Clean gitbook debug
 clean_debug:
@@ -176,8 +213,12 @@ clean_epub:
 clean_mobi:
 	-rm -rf $(MOBI_PATH)
 
+## Clean gitbook release
+clean_release: clean_website clean_pdf clean_epub clean_mobi
+	-rm -rf $(RELEASE_PATH)
+
 ## Clean all generated files
-clean_all: clean_generated_book_json clean_website clean_pdf clean_epub clean_mobi
+clean_all: clean_generated_all clean_debug clean_release
 
 ################################################################################
 # Gitbook Init / Preparation
@@ -185,31 +226,31 @@ clean_all: clean_generated_book_json clean_website clean_pdf clean_epub clean_mo
 
 ## Generate README.md from ../README_template.md and README_current.json
 generate_readme_md: clean_generated_readme_md
-	@python  ../generateReadmeMd.py
+	@python $(GENERATE_README_MD_FILE)
 
 ## copy README.md to ./src
-copy_readme:
+copy_readme: generate_readme_md
 	cp README.md ./src/README.md
 
 ## copy common .gitignore
 copy_gitignore:
-	cp ../gitignore_common .gitignore
+	cp $(COMMON_GITIGNORE_FILE) .gitignore
 
 ## Generate book.json from ../book_common.json and book_current.json
 generate_book_json: clean_generated_book_json
-	@python ../generateBookJson.py
+	@python $(GENERATE_BOOK_JSON_FILE)
 
 ## sync content
 sync_content: generate_book_json generate_readme_md copy_readme copy_gitignore
 	@echo Complete sync content
 
-## gitbook init to install plugins
-init: sync_content
+## gitbook install plugins
+install:
 	gitbook install
 
-## gitbook install plugins
-install: sync_content init
-	@echo Has installed all gitbook plugins
+## gitbook init to install plugins
+init: sync_content install
+	@echo Compelete init all things
 
 ################################################################################
 # Generate Files
@@ -257,7 +298,7 @@ all: website pdf epub mobi
 
 # ## Compress all generated files to single zip file
 # zip:
-# 	zip -r $(ZIP_NAME) $(OUTPUT_PATH)
+# 	zip -r $(ZIP_NAME) $(RELEASE_PATH)
 
 # ## Clean compressed file
 # clean_zip:
@@ -266,9 +307,6 @@ all: website pdf epub mobi
 ################################################################################
 # Upload to server
 ################################################################################
-
-DEPLOY_IGNORE_FILE = $(GITBOOK_ROOT)/deploy_ignore_book_list.txt
-# $(info DEPLOY_IGNORE_FILE=$(DEPLOY_IGNORE_FILE))
 
 SHOULD_IGNORE = false
 
@@ -292,35 +330,34 @@ endif
 
 endif
 
-## Upload all genereted website/pdf/epub/mobi files to remote server using rsync. Create DeployServerInfo.mk which contain deploy server IP+User+Password+Path before use this
+## Upload all genereted website/pdf/epub/mobi files to remote server using rsync. Create deploy_server_info.mk and deploy_server_password.txt which contain deploy server IP+User+Path and Password before use this
 upload: all
 	@echo ================================================================================
 ifeq ($(SHOULD_IGNORE), true)
 	@echo Ignore upload $(BOOK_NAME) to book.crifan.com
 else
 	@echo Upload for $(BOOK_NAME)
-	sshpass -p $(DEPLOY_SERVER_PASSWORD) rsync -avzh --progress --stats --delete --force $(OUTPUT_PATH) $(DEPLOY_SERVER_USER)@$(DEPLOY_SERVER_IP):$(DEPLOY_SERVER_PATH)
+	sshpass -f $(DEPLOY_SERVER_PASSWORD_FILE) rsync -avzh --progress --stats --delete --force $(RELEASE_PATH) $(DEPLOY_SERVER_USER)@$(DEPLOY_SERVER_IP):$(DEPLOY_SERVER_PATH)
 endif
 
 
 ################################################################################
 # Commit to github
 ################################################################################
-m ?= "1. update book $(BOOK_NAME)"
-GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
+COMMIT_COMMENT ?= "1. update book $(BOOK_NAME)"
 
 ## Commit generated files to github io
 commit: all
 	@echo ================================================================================
 	@echo Commit for $(BOOK_NAME)
-	rsync -avzh --progress --stats --delete --force $(OUTPUT_PATH) $(GITHUB_IO_PATH)
+	rsync -avzh --progress --stats --delete --force $(RELEASE_PATH) $(GITHUB_IO_PATH)
 	cd $(GITHUB_IO_PATH) && \
 	pwd && \
 	ls -la && \
 	git status && \
 	git add $(BOOK_NAME)/* && \
 	git status && \
-	git commit -m $(m) && \
+	git commit -m $(COMMIT_COMMENT) && \
 	git status && \
 	git push && \
 	cd $(CURRENT_DIR) && \

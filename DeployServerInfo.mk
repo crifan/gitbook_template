@@ -1,4 +1,0 @@
-DEPLOY_SERVER_IP=change_to_your_server_ip
-DEPLOY_SERVER_USER=change_to_your_server_user
-DEPLOY_SERVER_PASSWORD=change_to_your_server_password
-DEPLOY_SERVER_PATH=change_to_your_server_path

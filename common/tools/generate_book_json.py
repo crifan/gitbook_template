@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 """
 Author: Crifan Li
-Version: v1.0 20180615
-Function: Generate Gitbook's book.json from ../book_common.json and book_current.json
+Version: v1.1 20190531
+Function: Generate Gitbook's book.json from common_book.json and book_current.json
 Note: should run this python file from single gitbook foler
-      eg: /Users/crifan/GitBook/Library/Import/youdao_note_summary
+      eg: /Users/crifan/dev/dev_root/gitbook/gitbook_src_root/books/gitbook_demo
 """
 
 import os
@@ -20,7 +20,7 @@ import codecs
 # Global Config
 ################################################################################
 
-BookJsonTemplateFilename = "book_common.json"
+BookJsonTemplateFilename = "common_book.json"
 BookJsonCurrentFilename = "book_current.json"
 BookJsonOutputFilename = "book.json"
 
@@ -151,24 +151,27 @@ templateJson = {}
 currentJson = {}
 
 # run python in :
-# /Users/crifan/GitBook/Library/Import/youdao_note_summary
-# /Users/crifan/dev/dev_root/gitbook/GitbookTemplate/gitbook_template/gitbook_demo
+# /Users/crifan/dev/dev_root/gitbook/gitbook_src_root/books/gitbook_demo
 currPath = os.getcwd()
 # print("currPath=%s" % currPath)
 curDirname = os.path.dirname(currPath)
-# print("curDirname=%s" % curDirname)
+# print("curDirname=%s" % curDirname) # /Users/crifan/dev/dev_root/gitbook/gitbook_src_root/books
 curBasename = os.path.basename(currPath)
-# print("curBasename=%s" % curBasename)
-BookRootPath = curDirname
+# print("curBasename=%s" % curBasename) # gitbook_demo
+GitbookSrcRootBooks = curDirname
+# print("GitbookSrcRootBooks=%s" % GitbookSrcRootBooks)
+GitbookSrcRoot = os.path.abspath(os.path.join(GitbookSrcRootBooks, ".."))
+# print("GitbookSrcRoot=%s" % GitbookSrcRoot)
+
+CurrentBookPath = currPath
+# print("CurrentBookPath=%s" % CurrentBookPath)
+
 CurrentGitbookName = curBasename
-print("BookRootPath=%s" % BookRootPath)
-# /Users/crifan/GitBook/Library/Import
-# /Users/crifan/dev/dev_root/gitbook/GitbookTemplate/gitbook_template
-print("CurrentGitbookName=%s" % CurrentGitbookName)
+# print("CurrentGitbookName=%s" % CurrentGitbookName)
 # youdao_note_summary
 # gitbook_demo
 
-bookJsonTemplateFullPath = os.path.join(BookRootPath, BookJsonTemplateFilename)
+bookJsonTemplateFullPath = os.path.join(GitbookSrcRoot, "common/config/common" , BookJsonTemplateFilename)
 # print("bookJsonTemplateFullPath=%s" % bookJsonTemplateFullPath)
 # /Users/crifan/GitBook/Library/Import/book_common.json
 with open(bookJsonTemplateFullPath) as templateJsonFp:
@@ -177,7 +180,7 @@ with open(bookJsonTemplateFullPath) as templateJsonFp:
     # templateJson = OrderedDict(templateJson)
     # print("type(templateJson)=%s" % (type(templateJson))) #type(templateJson)=<class 'collections.OrderedDict'>
 
-bookJsonCurrentFullPath = os.path.join(BookRootPath, CurrentGitbookName, BookJsonCurrentFilename)
+bookJsonCurrentFullPath = os.path.join(CurrentBookPath, BookJsonCurrentFilename)
 # print("bookJsonCurrentFullPath=%s" % bookJsonCurrentFullPath)
 with open(bookJsonCurrentFullPath) as currentJsonFp:
     currentJson = json.load(currentJsonFp, encoding="utf-8")
@@ -202,6 +205,6 @@ bookJson = recursiveMergeDict(templateJson, copy.deepcopy(currentJson))
 # print("type(currentJson)=%s" % (type(currentJson)))
 # print("type(bookJson)=%s" % (type(bookJson)))
 
-bookJsonFullPath = os.path.join(BookRootPath, CurrentGitbookName, BookJsonOutputFilename)
+bookJsonFullPath = os.path.join(CurrentBookPath, BookJsonOutputFilename)
 # print("bookJsonFullPath=%s" % bookJsonFullPath)
 saveJsonToFile(bookJson, bookJsonFullPath)

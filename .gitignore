@@ -1,0 +1,11 @@
+node_modules/
+output/
+debug/
+
+*.zip
+
+.DS_Store
+
+
+generated/books/
+generated/gitbook/

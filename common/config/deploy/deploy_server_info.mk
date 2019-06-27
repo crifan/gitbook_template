@@ -1,0 +1,3 @@
+DEPLOY_SERVER_IP=149.28.136.189
+DEPLOY_SERVER_USER=root
+DEPLOY_SERVER_PATH=/data/wwwroot/book.crifan.com/books
