@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20190627`
+最后更新：`20200626`
 
 ## 项目代码仓库
 
@@ -67,8 +67,8 @@
 * [【已解决】提取Gitbook中Makefile公共部分](http://www.crifan.com/gitbook_extract_common_part_of_makefile)
 * [【已解决】gitbook中book.json中能否把公共部分提取出来](http://www.crifan.com/gitbook_extract_book_json_common_part)
 * [【基本解决】Makefile中从独立文件比如json中读取配置变量](http://www.crifan.com/makefile_import_read_config_variable_from_file_like_json)
-* 【规避解决】gitbook install时能否指定node_modules的安装路径
-* 【已解决】优化gitbook的生成book模板提取共用的node_modules
+* [【规避解决】gitbook install时能否指定node_modules的安装路径](http://www.crifan.com/gitbook_install_whether_designate_node_modules_install_path)
+* [【已解决】优化gitbook的生成book模板提取共用的node_modules](http://www.crifan.com/optimize_gitbook_generate_book_template_extract_common_node_modules)
 
 ## 使用步骤
 
@@ -98,11 +98,11 @@ gitbook有个bug：
 
 `/Users/换成你的用户名/.gitbook/versions/3.2.3/lib/output/website/copyPluginAssets.js`
 
-中的`copyResources`的`confirm`从`true`改为`false`
+中的`copyResources`中`fs.copyDir`的`confirm`从`true`改为`false`
 
 具体步骤，详见：
 
-* 【已解决】gitbook编译偶尔报错：Error ENOENT no such file or directory stat
+* [【已解决】gitbook编译偶尔报错：Error ENOENT no such file or directory stat](http://www.crifan.com/gitbook_compile_occasionally_error_enoent_no_such_file_or_directory_stat)
 
 ### 下载模板源码
 
@@ -212,6 +212,63 @@ DEPLOY_SERVER_PATH=/data/wwwroot/book.crifan.com/books
 ```make
 xxxxxx
 ```
+
+## 新建gitbook
+
+下面通过实际例子去介绍如何新建一个gitbook：
+
+切换到`books`目录下，去下载代码：
+
+```bash
+git clone https://github.com/crifan/python_common_code_snippet.git
+```
+
+切换到该目录下：
+
+```bash
+cd python_common_code_snippet
+```
+
+然后手动拷贝模板book`gitbook_demo`中的所有内容到当前目录：
+
+```bash
+cp -a ../gitbook_demo/* .
+```
+
+编辑自己的`book_current.json`和`README_current.json`，更新你的版本号，文件描述，book的name等。
+
+再去同步更新内容：
+
+```bash
+make sync_content
+```
+
+其内部会同步（生成）更新`book.json`和`README.md`、`src/README.md`。
+
+然后再去编辑自己的书的目录：`src/SUMMARY.md`
+
+
+然后去：
+
+```bash
+make debug
+```
+
+再去浏览器打开：
+
+http://localhost:4000/
+
+之后就是：更新你的各种`md`文件内容了
+
+如果一切正常，gitbook系统会自动检测到`md`文件的改动，触发重新编译，自动刷新页面内容。
+
+最后内容完成后，再去：
+
+```bash
+make deploy
+```
+
+去发布，即可。
 
 ## 其他说明
 

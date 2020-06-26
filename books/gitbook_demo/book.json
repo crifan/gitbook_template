@@ -1,131 +1,131 @@
 {
-  "description": "用于演示如何用Gitbook创建自己的book电子书", 
-  "links": {
-    "sidebar": {
-      "主页": "http://www.crifan.com"
-    }
-  }, 
-  "author": "Crifan Li <admin@crifan.com>", 
-  "title": "Gitbook演示", 
-  "gitbook": "3.2.3", 
-  "language": "zh-hans", 
-  "plugins": [
-    "theme-comscore", 
-    "anchors", 
-    "-lunr", 
-    "-search", 
-    "search-plus", 
-    "disqus", 
-    "-highlight", 
-    "prism", 
-    "prism-themes", 
-    "github-buttons", 
-    "splitter", 
-    "-sharing", 
-    "sharing-plus", 
-    "tbfed-pagefooter", 
-    "expandable-chapters-small", 
-    "ga", 
-    "donate", 
-    "sitemap-general", 
-    "copy-code-button", 
-    "callouts", 
-    "toolbar-button"
-  ], 
+  "title": "Gitbook演示",
+  "description": "用于演示如何用Gitbook创建自己的book电子书",
   "pluginsConfig": {
-    "toolbar-button": {
-      "url": "http://book.crifan.com/books/gitbook_demo/pdf/gitbook_demo.pdf", 
-      "icon": "fa-file-pdf-o", 
-      "label": "下载PDF"
-    }, 
-    "sitemap-general": {
-      "prefix": "https://book.crifan.com/gitbook/gitbook_demo/website/"
-    }, 
-    "sharing": {
-      "qq": true, 
-      "douban": false, 
-      "all": [
-        "douban", 
-        "facebook", 
-        "google", 
-        "instapaper", 
-        "line", 
-        "linkedin", 
-        "messenger", 
-        "pocket", 
-        "qq", 
-        "qzone", 
-        "stumbleupon", 
-        "twitter", 
-        "viber", 
-        "vk", 
-        "weibo", 
-        "whatsapp"
-      ], 
-      "google": false, 
-      "stumbleupon": false, 
-      "hatenaBookmark": false, 
-      "twitter": true, 
-      "vk": false, 
-      "linkedin": false, 
-      "instapaper": false, 
-      "pocket": false, 
-      "weibo": true, 
-      "viber": false, 
-      "facebook": true, 
-      "qzone": false, 
-      "messenger": false, 
-      "line": false, 
-      "whatsapp": false
-    }, 
-    "tbfed-pagefooter": {
-      "modify_format": "YYYY-MM-DD HH:mm:ss", 
-      "modify_label": "最后更新：", 
-      "copyright": "crifan.com，使用<a href='https://creativecommons.org/licenses/by/4.0/deed.zh'>署名4.0国际(CC BY 4.0)协议</a>发布"
-    }, 
     "github-buttons": {
       "buttons": [
         {
-          "repo": "gitbook_demo", 
-          "count": true, 
-          "type": "star", 
-          "user": "crifan", 
+          "repo": "gitbook_demo",
+          "user": "crifan",
+          "type": "star",
+          "count": true,
           "size": "small"
-        }, 
+        },
         {
-          "count": false, 
-          "width": "120", 
-          "type": "follow", 
-          "user": "crifan", 
+          "user": "crifan",
+          "type": "follow",
+          "width": "120",
+          "count": false,
           "size": "small"
         }
       ]
-    }, 
+    },
+    "sitemap-general": {
+      "prefix": "https://book.crifan.com/gitbook/gitbook_demo/website/"
+    },
+    "toolbar-button": {
+      "url": "http://book.crifan.com/books/gitbook_demo/pdf/gitbook_demo.pdf",
+      "icon": "fa-file-pdf-o",
+      "label": "下载PDF"
+    },
+    "callouts": {
+      "showTypeInHeader": false
+    },
+    "theme-default": {
+      "showLevel": true
+    },
     "disqus": {
       "shortName": "crifan"
-    }, 
+    },
     "prism": {
       "css": [
         "prism-themes/themes/prism-atom-dark.css"
       ]
-    }, 
+    },
+    "sharing": {
+      "douban": false,
+      "facebook": true,
+      "google": false,
+      "hatenaBookmark": false,
+      "instapaper": false,
+      "line": false,
+      "linkedin": false,
+      "messenger": false,
+      "pocket": false,
+      "qq": true,
+      "qzone": false,
+      "stumbleupon": false,
+      "twitter": true,
+      "viber": false,
+      "vk": false,
+      "weibo": true,
+      "whatsapp": false,
+      "all": [
+        "douban",
+        "facebook",
+        "google",
+        "instapaper",
+        "line",
+        "linkedin",
+        "messenger",
+        "pocket",
+        "qq",
+        "qzone",
+        "stumbleupon",
+        "twitter",
+        "viber",
+        "vk",
+        "weibo",
+        "whatsapp"
+      ]
+    },
+    "tbfed-pagefooter": {
+      "copyright": "crifan.com，使用<a href='https://creativecommons.org/licenses/by/4.0/deed.zh'>署名4.0国际(CC BY 4.0)协议</a>发布",
+      "modify_label": "最后更新：",
+      "modify_format": "YYYY-MM-DD HH:mm:ss"
+    },
     "ga": {
       "token": "UA-28297199-1"
-    }, 
-    "theme-default": {
-      "showLevel": true
-    }, 
+    },
     "donate": {
-      "alipay": "https://www.crifan.com/files/res/crifan_com/crifan_alipay_pay.jpg", 
-      "title": "", 
-      "alipayText": "支付宝打赏给Crifan", 
-      "button": "打赏", 
-      "wechatText": "微信打赏给Crifan", 
-      "wechat": "https://www.crifan.com/files/res/crifan_com/crifan_wechat_pay.jpg"
-    }, 
-    "callouts": {
-      "showTypeInHeader": false
+      "wechat": "https://www.crifan.com/files/res/crifan_com/crifan_wechat_pay.jpg",
+      "alipay": "https://www.crifan.com/files/res/crifan_com/crifan_alipay_pay.jpg",
+      "title": "",
+      "button": "打赏",
+      "alipayText": "支付宝打赏给Crifan",
+      "wechatText": "微信打赏给Crifan"
     }
-  }, 
-  "root": "./src"
+  },
+  "author": "Crifan Li <admin@crifan.com>",
+  "language": "zh-hans",
+  "gitbook": "3.2.3",
+  "root": "./src",
+  "links": {
+    "sidebar": {
+      "主页": "http://www.crifan.com"
+    }
+  },
+  "plugins": [
+    "theme-comscore",
+    "anchors",
+    "-lunr",
+    "-search",
+    "search-plus",
+    "disqus",
+    "-highlight",
+    "prism",
+    "prism-themes",
+    "github-buttons",
+    "splitter",
+    "-sharing",
+    "sharing-plus",
+    "tbfed-pagefooter",
+    "expandable-chapters-small",
+    "ga",
+    "donate",
+    "sitemap-general",
+    "copy-code-button",
+    "callouts",
+    "toolbar-button"
+  ]
 }
