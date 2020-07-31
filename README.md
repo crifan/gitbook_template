@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20200626`
+最后更新：`20200731`
 
 ## 项目代码仓库
 
@@ -174,6 +174,22 @@ make deploy
 
 **注意**：`deploy`之前，需要修改相关信息为你自己的配置：
 
+#### 对于`upload`
+
+当然，如果自己没有`upload`的需求，则可以修改`common/gitbook_makefile.mk`中的`deploy`的依赖：
+
+```make
+deploy: upload commit
+```
+
+改为：
+
+```make
+deploy: commit
+```
+
+即可去掉`upload`的动作。
+
 #### 对于`commit`
 
 修改`common/gitbook_makefile.mk`中的`github`本地文件路径：
@@ -253,6 +269,8 @@ make sync_content
 ```bash
 make debug
 ```
+
+注：其实（每次调试期间的）`make debug`内部也已经自动依赖和调用`make sync_content`了，以避免自己粗心，没有同步文件。
 
 再去浏览器打开：
 
@@ -346,16 +364,16 @@ scientific_network_summary
 对于`Makefile`如果还有其他疑问，可以通过`make help`去查看说明：
 
 ```bash
-➜  gitbook_demo git:(master) ✗ make help
+➜  gitbook_demo git:(master) ✗ make help           
 --------------------------------------------------------------------------------
 Author  : crifan.com
-Version : 20190531
-Function: Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to github io repo
+Version : 20200731
+Function: Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
                 Run 'make help' to see usage
 --------------------------------------------------------------------------------
-CURRENT_DIR=/Users/crifan/dev/dev_root/gitbook/GitbookTemplate/gitbook_template/books/gitbook_demo
-BOOK_NAME=gitbook_demo
-NOT found gitbook_demo in IGNORE_FILE_CONTENT=
+CURRENT_DIR=/Users/limao/dev/crifan/gitbook/gitbook_template/books/use_python_write_spider
+BOOK_NAME=use_python_write_spider
+NOT found use_python_write_spider in IGNORE_FILE_CONTENT=
 
 Usage:
   make <target>

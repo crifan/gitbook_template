@@ -5,7 +5,8 @@
 ################################################################################
 
 # if need commit, change these to yours
-GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
+# GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
+GITHUB_IO_PATH=/Users/limao/dev/crifan/crifan.github.io
 
 # if need upload/deploy, update content of these file
 DEPLOY_SERVER_PASSWORD_FILE=$(GITBOOK_ROOT_COMMON)/config/deploy/deploy_server_password.txt
@@ -40,8 +41,8 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20190627
-Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to github io repo
+Version=20200731
+Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
 RunHelp = Run 'make help' to see usage
 $(info --------------------------------------------------------------------------------)
 $(info ${YELLOW}Author${RESET}  : ${GREEN}$(Author)${RESET})
@@ -354,6 +355,7 @@ commit: all
 	cd $(GITHUB_IO_PATH) && \
 	pwd && \
 	ls -la && \
+	git pull && \
 	git status && \
 	git add $(BOOK_NAME)/* && \
 	git status && \
