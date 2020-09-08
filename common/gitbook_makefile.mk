@@ -5,8 +5,8 @@
 ################################################################################
 
 # if need commit, change these to yours
-# GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
-GITHUB_IO_PATH=/Users/limao/dev/crifan/crifan.github.io
+GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
+# GITHUB_IO_PATH=/Users/limao/dev/crifan/crifan.github.io
 
 # if need upload/deploy, update content of these file
 DEPLOY_SERVER_PASSWORD_FILE=$(GITBOOK_ROOT_COMMON)/config/deploy/deploy_server_password.txt
@@ -14,9 +14,17 @@ DEPLOY_IGNORE_FILE=$(GITBOOK_ROOT_COMMON)/config/deploy/deploy_ignore_book_list.
 
 COMMON_GITIGNORE_FILE=$(GITBOOK_ROOT_COMMON)/config/common/common_gitignore
 
+# for rsync not use any proxy
+RSYNC_PROXY = 
+# for rsync use sock5 proxy
+# PROXY_SOCK5 = 127.0.0.1:51837
+# RSYNC_PROXY = -e "ssh -o 'ProxyCommand nc -X 5 -x $(PROXY_SOCK5) %h %p' -o ServerAliveInterval=30 -o ServerAliveCountMax=5"
+
 ################################################################################
 # Global defines
 ################################################################################
+
+RSYNC_PARAMS = $(RSYNC_PROXY) -avzh --progress --stats --delete --force
 
 GENERATE_BOOK_JSON_FILE=$(GITBOOK_ROOT_COMMON)/tools/generate_book_json.py
 GENERATE_README_MD_FILE=$(GITBOOK_ROOT_COMMON)/tools/generate_readme_md.py
@@ -41,7 +49,7 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20200731
+Version=20200908
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
 RunHelp = Run 'make help' to see usage
 $(info --------------------------------------------------------------------------------)
@@ -338,7 +346,7 @@ ifeq ($(SHOULD_IGNORE), true)
 	@echo Ignore upload $(BOOK_NAME) to book.crifan.com
 else
 	@echo Upload for $(BOOK_NAME)
-	sshpass -f $(DEPLOY_SERVER_PASSWORD_FILE) rsync -avzh --progress --stats --delete --force $(RELEASE_PATH) $(DEPLOY_SERVER_USER)@$(DEPLOY_SERVER_IP):$(DEPLOY_SERVER_PATH)
+	sshpass -f $(DEPLOY_SERVER_PASSWORD_FILE) rsync $(RSYNC_PARAMS) $(RELEASE_PATH) $(DEPLOY_SERVER_USER)@$(DEPLOY_SERVER_IP):$(DEPLOY_SERVER_PATH)
 endif
 
 
@@ -351,7 +359,7 @@ COMMIT_COMMENT ?= "1. update book $(BOOK_NAME)"
 commit: all
 	@echo ================================================================================
 	@echo Commit for $(BOOK_NAME)
-	rsync -avzh --progress --stats --delete --force $(RELEASE_PATH) $(GITHUB_IO_PATH)
+	rsync $(RSYNC_PARAMS) $(RELEASE_PATH) $(GITHUB_IO_PATH)
 	cd $(GITHUB_IO_PATH) && \
 	pwd && \
 	ls -la && \

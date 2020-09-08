@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20200731`
+最后更新：`20200908`
 
 ## 项目代码仓库
 
@@ -289,6 +289,27 @@ make deploy
 去发布，即可。
 
 ## 其他说明
+
+### 给rsync添加代理以提速
+
+此处用`rsync`同步上传文件到自己的github.io仓库中或自己的网站中时，有时候速度很慢
+
+为了提速，可以考虑加代理。
+
+此处`common/gitbook_makefile.mk`中默认关闭了代理：
+
+```makefile
+# for rsync not use any proxy
+RSYNC_PROXY = 
+```
+
+如果需要，可以去开启代理，且注意要改为你自己的代理的值，比如我自己的是：
+
+```makefile
+# for rsync use sock5 proxy
+PROXY_SOCK5 = 127.0.0.1:51837
+RSYNC_PROXY = -e "ssh -o 'ProxyCommand nc -X 5 -x $(PROXY_SOCK5) %h %p' -o ServerAliveInterval=30 -o ServerAliveCountMax=5
+```
 
 ### 提取共用的node_modules
 
