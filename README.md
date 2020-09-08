@@ -4,7 +4,7 @@
 
 ## 项目代码仓库
 
-[https://github.com/crifan/gitbook_template](https://github.com/crifan/gitbook_template) 
+[https://github.com/crifan/gitbook_template](https://github.com/crifan/gitbook_template)
 
 ## 项目作用
 
@@ -385,16 +385,16 @@ scientific_network_summary
 对于`Makefile`如果还有其他疑问，可以通过`make help`去查看说明：
 
 ```bash
-➜  gitbook_demo git:(master) ✗ make help           
+➜  gitbook_demo git:(master) ✗ make help
 --------------------------------------------------------------------------------
 Author  : crifan.com
-Version : 20200731
+Version : 20200908
 Function: Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
                 Run 'make help' to see usage
 --------------------------------------------------------------------------------
-CURRENT_DIR=/Users/limao/dev/crifan/gitbook/gitbook_template/books/use_python_write_spider
-BOOK_NAME=use_python_write_spider
-NOT found use_python_write_spider in IGNORE_FILE_CONTENT=
+CURRENT_DIR=/Users/crifan/dev/dev_root/gitbook/gitbook_src_root/books/crack_assistant_xposed_framework
+BOOK_NAME=crack_assistant_xposed_framework
+NOT found crack_assistant_xposed_framework in IGNORE_FILE_CONTENT=
 
 Usage:
   make <target>
