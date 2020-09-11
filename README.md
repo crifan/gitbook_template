@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20200908`
+最后更新：`20200911`
 
 ## 项目代码仓库
 
@@ -289,6 +289,32 @@ make deploy
 去发布，即可。
 
 ## 其他说明
+
+### 指定debug的端口用于同时debug多个book
+
+已更新makefile支持在
+
+```bash
+make debug
+```
+
+时指定端口，即：
+
+* `make debug` == `make debug GITBOOK_DEBUG_PORT=4000 GITBOOK_DEBUG_LRPORT=35729`
+
+对应内部的命令参数：
+
+```bash
+gitbook serve --port 4000 --lrport 35729 ...
+```
+
+> 注：`lrport`=`live reload port`=改动文件后自动重新加载
+
+同时可以（在另外一个终端中）启动另外一个debug，指定特定的端口，比如：
+
+* `make debug GITBOOK_DEBUG_PORT=4001 GITBOOK_DEBUG_LRPORT=35730`
+
+即可同时编辑多个`gitbook`，而不会出现端口相同而冲突。
 
 ### 给rsync添加代理以提速
 

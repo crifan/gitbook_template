@@ -20,6 +20,10 @@ RSYNC_PROXY =
 # PROXY_SOCK5 = 127.0.0.1:51837
 # RSYNC_PROXY = -e "ssh -o 'ProxyCommand nc -X 5 -x $(PROXY_SOCK5) %h %p' -o ServerAliveInterval=30 -o ServerAliveCountMax=5"
 
+# Gitbook Debug Port and LiveReload Port
+GITBOOK_DEBUG_PORT ?= 4000
+GITBOOK_DEBUG_LRPORT ?= 35729
+
 ################################################################################
 # Global defines
 ################################################################################
@@ -49,7 +53,7 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20200908
+Version=20200911
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
 RunHelp = Run 'make help' to see usage
 $(info --------------------------------------------------------------------------------)
@@ -270,7 +274,7 @@ GITBOOK_COMMON_FLAGS= --log debug
 
 ## Debug gitbook
 debug: sync_content clean_debug create_folder_debug
-	gitbook serve $(CURRENT_DIR) $(DEBUG_PATH) $(GITBOOK_COMMON_FLAGS)
+	gitbook --port $(GITBOOK_DEBUG_PORT) --lrport $(GITBOOK_DEBUG_LRPORT) serve $(CURRENT_DIR) $(DEBUG_PATH) $(GITBOOK_COMMON_FLAGS)
 
 ## Generate gitbook website
 website: sync_content clean_website create_folder_website
