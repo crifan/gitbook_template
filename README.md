@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20200911`
+最后更新：`20200915`
 
 ## 项目代码仓库
 
@@ -259,10 +259,13 @@ cp -a ../gitbook_demo/* .
 make sync_content
 ```
 
-其内部会同步（生成）更新`book.json`和`README.md`、`src/README.md`。
+其内部会：
+
+* 同步`README_current.json`中的`gitRepoName`、`bookName`、`bookDescription`到`book_current.json`中的`repo`和`url`、`title`、`description`
+* （用Python脚本根据模板）从`book_current.json`和`README_current.json`生成`book.json`和`README.md`
+* 同步（拷贝）`README.md`到`src/README.md`
 
 然后再去编辑自己的书的目录：`src/SUMMARY.md`
-
 
 然后去：
 

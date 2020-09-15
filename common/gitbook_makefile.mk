@@ -30,6 +30,7 @@ GITBOOK_DEBUG_LRPORT ?= 35729
 
 RSYNC_PARAMS = $(RSYNC_PROXY) -avzh --progress --stats --delete --force
 
+SYNC_README_JSON_TO_BOOK_JSON=$(GITBOOK_ROOT_COMMON)/tools/sync_ReadmeCurrent_to_bookCurrent.py
 GENERATE_BOOK_JSON_FILE=$(GITBOOK_ROOT_COMMON)/tools/generate_book_json.py
 GENERATE_README_MD_FILE=$(GITBOOK_ROOT_COMMON)/tools/generate_readme_md.py
 
@@ -53,7 +54,7 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20200911
+Version=20200915
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
 RunHelp = Run 'make help' to see usage
 $(info --------------------------------------------------------------------------------)
@@ -249,12 +250,16 @@ copy_readme: generate_readme_md
 copy_gitignore:
 	cp $(COMMON_GITIGNORE_FILE) .gitignore
 
+## Sync README_current.json to book_current.json
+sync_readme_to_book:
+	@python $(SYNC_README_JSON_TO_BOOK_JSON)
+
 ## Generate book.json from ../book_common.json and book_current.json
 generate_book_json: clean_generated_book_json
 	@python $(GENERATE_BOOK_JSON_FILE)
 
 ## sync content
-sync_content: generate_book_json generate_readme_md copy_readme copy_gitignore
+sync_content: sync_readme_to_book generate_book_json generate_readme_md copy_readme copy_gitignore
 	@echo Complete sync content
 
 ## gitbook install plugins
