@@ -384,27 +384,44 @@ commit: all
 	@echo ================================================================================
 ifeq ($(ENABLE_COMMIT_GITHUB_IO), true)
 	@echo Commit for $(BOOK_NAME)
-	rsync $(RSYNC_PARAMS) $(RELEASE_PATH) $(GITHUB_IO_PATH)
+	@echo pull github.io
 	cd $(GITHUB_IO_PATH) && \
 	pwd && \
 	ls -la && \
-	git pull && \
+	pwd && \
+	git pull
+	pwd
+	@echo update readme.md of local github.io
 	if [ $(ENABLE_UPDATE_GITHUB_IO_README) == true ]; then \
 		python $(UPDATE_GITHUB_IO_README_FILE) --curBookRepoName $(BOOK_NAME) --localGithubIoPath $(GITHUB_IO_PATH); \
 	else \
 		echo "Ignored update README.md before commit $(BOOK_NAME) to github.io"; \
-	fi; \
+	fi;
+	@echo copy current book all generated files to local github.io
+	rsync $(RSYNC_PARAMS) $(RELEASE_PATH) $(GITHUB_IO_PATH)
+	@echo push modifed content to github.io
+	cd $(GITHUB_IO_PATH) && \
+	pwd && \
 	git status && \
+	pwd && \
+	git add README.md && \
 	git add $(BOOK_NAME)/* && \
+	pwd && \
 	git status && \
+	pwd && \
 	git commit -m $(COMMIT_COMMENT) && \
+	pwd && \
 	git status && \
+	pwd && \
 	git push && \
+	pwd && \
 	cd $(CURRENT_DIR) && \
 	pwd
 else
 	@echo Ignored commit $(BOOK_NAME) to github.io
 endif
+
+
 
 
 ################################################################################
