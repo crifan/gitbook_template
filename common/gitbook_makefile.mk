@@ -4,9 +4,33 @@
 # Global Config
 ################################################################################
 
-# if need commit, change these to yours
-GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
-# GITHUB_IO_PATH=/Users/limao/dev/crifan/crifan.github.io
+ENABLE_COMMIT_GITHUB_IO = false
+# ENABLE_COMMIT_GITHUB_IO = true
+
+ifeq ($(ENABLE_COMMIT_GITHUB_IO), true)
+# if need commit, enable and change to yours path
+# GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
+GITHUB_IO_PATH=/Users/limao/dev/crifan/crifan.github.io
+
+# ENABLE_UPDATE_GITHUB_IO_README = false
+ENABLE_UPDATE_GITHUB_IO_README = true
+endif
+
+ENABLE_RSYNC_PROXY = false
+# ENABLE_RSYNC_PROXY = true
+
+ifeq ($(ENABLE_RSYNC_PROXY), true)
+# for rsync use sock5 proxy
+PROXY_SOCK5 = 127.0.0.1:51837
+RSYNC_PROXY = -e "ssh -o 'ProxyCommand nc -X 5 -x $(PROXY_SOCK5) %h %p' -o ServerAliveInterval=30 -o ServerAliveCountMax=5"
+else
+# for rsync not use any proxy
+RSYNC_PROXY = 
+endif
+
+# Gitbook Debug Port and LiveReload Port
+GITBOOK_DEBUG_PORT ?= 4000
+GITBOOK_DEBUG_LRPORT ?= 35729
 
 # if need upload/deploy, update content of these file
 DEPLOY_SERVER_PASSWORD_FILE=$(GITBOOK_ROOT_COMMON)/config/deploy/deploy_server_password.txt
@@ -14,25 +38,16 @@ DEPLOY_IGNORE_FILE=$(GITBOOK_ROOT_COMMON)/config/deploy/deploy_ignore_book_list.
 
 COMMON_GITIGNORE_FILE=$(GITBOOK_ROOT_COMMON)/config/common/common_gitignore
 
-# for rsync not use any proxy
-RSYNC_PROXY = 
-# for rsync use sock5 proxy
-# PROXY_SOCK5 = 127.0.0.1:51837
-# RSYNC_PROXY = -e "ssh -o 'ProxyCommand nc -X 5 -x $(PROXY_SOCK5) %h %p' -o ServerAliveInterval=30 -o ServerAliveCountMax=5"
-
-# Gitbook Debug Port and LiveReload Port
-GITBOOK_DEBUG_PORT ?= 4000
-GITBOOK_DEBUG_LRPORT ?= 35729
-
 ################################################################################
 # Global defines
 ################################################################################
 
 RSYNC_PARAMS = $(RSYNC_PROXY) -avzh --progress --stats --delete --force
 
-SYNC_README_JSON_TO_BOOK_JSON=$(GITBOOK_ROOT_COMMON)/tools/sync_ReadmeCurrent_to_bookCurrent.py
 GENERATE_BOOK_JSON_FILE=$(GITBOOK_ROOT_COMMON)/tools/generate_book_json.py
 GENERATE_README_MD_FILE=$(GITBOOK_ROOT_COMMON)/tools/generate_readme_md.py
+SYNC_README_JSON_TO_BOOK_JSON_FILE=$(GITBOOK_ROOT_COMMON)/tools/sync_ReadmeCurrent_to_bookCurrent.py
+UPDATE_GITHUB_IO_README_FILE=$(GITBOOK_ROOT_COMMON)/tools/update_crifan_github_io_readme.py
 
 # COLORS
 GREEN  := $(shell tput -Txterm setaf 2)
@@ -54,7 +69,7 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20200915
+Version=20200918
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
 RunHelp = Run 'make help' to see usage
 $(info --------------------------------------------------------------------------------)
@@ -252,7 +267,7 @@ copy_gitignore:
 
 ## Sync README_current.json to book_current.json
 sync_readme_to_book:
-	@python $(SYNC_README_JSON_TO_BOOK_JSON)
+	@python $(SYNC_README_JSON_TO_BOOK_JSON_FILE)
 
 ## Generate book.json from ../book_common.json and book_current.json
 generate_book_json: clean_generated_book_json
@@ -367,12 +382,18 @@ COMMIT_COMMENT ?= "1. update book $(BOOK_NAME)"
 ## Commit generated files to github io
 commit: all
 	@echo ================================================================================
+ifeq ($(ENABLE_COMMIT_GITHUB_IO), true)
 	@echo Commit for $(BOOK_NAME)
 	rsync $(RSYNC_PARAMS) $(RELEASE_PATH) $(GITHUB_IO_PATH)
 	cd $(GITHUB_IO_PATH) && \
 	pwd && \
 	ls -la && \
 	git pull && \
+	if [ $(ENABLE_UPDATE_GITHUB_IO_README) == true ]; then \
+		python $(UPDATE_GITHUB_IO_README_FILE) --curBookRepoName $(BOOK_NAME) --localGithubIoPath $(GITHUB_IO_PATH); \
+	else \
+		echo "Ignored update README.md before commit $(BOOK_NAME) to github.io"; \
+	fi; \
 	git status && \
 	git add $(BOOK_NAME)/* && \
 	git status && \
@@ -381,6 +402,10 @@ commit: all
 	git push && \
 	cd $(CURRENT_DIR) && \
 	pwd
+else
+	@echo Ignored commit $(BOOK_NAME) to github.io
+endif
+
 
 ################################################################################
 # Deploy generated files to remote server and github.io repo

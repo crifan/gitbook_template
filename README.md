@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20200915`
+最后更新：`20200918`
 
 ## 项目代码仓库
 
@@ -45,7 +45,9 @@
 │   ├── gitbook_makefile.mk                 # 所有book共用的Makefile
 │   └── tools
 │       ├── generate_book_json.py           # 脚本，用于从book_current.json和common_book.json生成每个book的book.json
-│       └── generate_readme_md.py           # 脚本，用于从README_current.json和template_README.md生成每个book的README.md
+│       ├── generate_book_json.py           # 脚本，用于从book_current.json和common_book.json生成每个book的book.json
+│       └── sync_ReadmeCurrent_to_bookCurrent.py  # 脚本，用于从README_current.json同步gitRepoName、bookName、bookDescription到book_current.json
+│       └── update_crifan_github_io_readme.py  # 脚本，用于自动更新crifan的本地的github.io的README.md，更新最后更新日期和加上（如果缺失）当前book到gitbook列表
 ├── generated                               # 所有后续工具生成的各种文件都放到这里
 │   ├── books                               # 保存每个book生成的各种文件，包括pdf，html等等
 │   └── gitbook                             # 保存gitbook生成的文件，目前只有共用的node_modules
@@ -192,7 +194,19 @@ deploy: commit
 
 #### 对于`commit`
 
-修改`common/gitbook_makefile.mk`中的`github`本地文件路径：
+对于：`common/gitbook_makefile.mk`
+
+如果自己没有需要commit的github.io的代码，则可以保持默认的：
+
+`ENABLE_COMMIT_GITHUB_IO = false`
+
+而不会去commit任何内容。
+
+如果需要，则去改为true：
+
+`ENABLE_COMMIT_GITHUB_IO = true`
+
+以及更新为你自己的`github`本地文件路径，比如：
 
 ```make
 GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
@@ -328,13 +342,15 @@ gitbook serve --port 4000 --lrport 35729 ...
 此处`common/gitbook_makefile.mk`中默认关闭了代理：
 
 ```makefile
-# for rsync not use any proxy
-RSYNC_PROXY = 
+ENABLE_RSYNC_PROXY = false
 ```
 
 如果需要，可以去开启代理，且注意要改为你自己的代理的值，比如我自己的是：
 
 ```makefile
+ENABLE_RSYNC_PROXY = true
+
+ifeq ($(ENABLE_RSYNC_PROXY), true)
 # for rsync use sock5 proxy
 PROXY_SOCK5 = 127.0.0.1:51837
 RSYNC_PROXY = -e "ssh -o 'ProxyCommand nc -X 5 -x $(PROXY_SOCK5) %h %p' -o ServerAliveInterval=30 -o ServerAliveCountMax=5
