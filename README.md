@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20200918`
+最后更新：`20201127`
 
 ## 项目代码仓库
 
@@ -114,6 +114,7 @@ gitbook有个bug：
 
 ```bash
 cd gitbook_template/books/gitbook_demo/
+rm -rf node_modules/
 make init
 ```
 
