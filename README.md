@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20201127`
+最后更新：`20201223`
 
 ## 项目代码仓库
 
@@ -9,7 +9,7 @@
 ## 项目作用
 
 1. 用于演示如何使用`crifan`的**gitbook模板**
-2. 别人和自己，可以基于此模板，快速方便的创建出自己的gitbook电子书
+2. 别人和自己，可以基于此模板，快速方便的创建出自己的[gitbook](https://book.crifan.com/books/ebook_system_gitbook/website/)电子书
 
 ## 项目结构
 
@@ -73,6 +73,22 @@
 * [【已解决】优化gitbook的生成book模板提取共用的node_modules](http://www.crifan.com/optimize_gitbook_generate_book_template_extract_common_node_modules)
 
 ## 使用步骤
+
+简述：
+
+```bash
+git clone https://github.com/crifan/gitbook_template.git
+
+cd gitbook_template/books/gitbook_demo/
+rm -rf node_modules/
+make init
+
+make debug
+
+make all
+
+make deploy
+```
 
 下面详细介绍，如何使用本`Gitbook`模板，去创建一个自己的`book`
 
