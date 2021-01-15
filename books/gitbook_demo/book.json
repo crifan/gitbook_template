@@ -1,6 +1,6 @@
 {
   "title": "Gitbook演示",
-  "description": "用于演示如何用Gitbook创建自己的book电子书",
+  "description": "crifan的Gitbook模版，用于演示如何用Gitbook创建一个自己的book电子书",
   "pluginsConfig": {
     "github-buttons": {
       "buttons": [
@@ -27,6 +27,13 @@
       "url": "http://book.crifan.com/books/gitbook_demo/pdf/gitbook_demo.pdf",
       "icon": "fa-file-pdf-o",
       "label": "下载PDF"
+    },
+    "google-adsense": {
+      "ads": [
+        {
+          "client": "ca-pub-6626240105039250"
+        }
+      ]
     },
     "callouts": {
       "showTypeInHeader": false
@@ -106,6 +113,7 @@
     }
   },
   "plugins": [
+    "google-adsense",
     "theme-comscore",
     "anchors",
     "-lunr",

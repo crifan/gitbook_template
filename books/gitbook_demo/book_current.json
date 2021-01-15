@@ -1,6 +1,6 @@
 {
   "title": "Gitbook演示",
-  "description": "用于演示如何用Gitbook创建自己的book电子书",
+  "description": "crifan的Gitbook模版，用于演示如何用Gitbook创建一个自己的book电子书",
   "pluginsConfig": {
     "github-buttons": {
       "buttons": [

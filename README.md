@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20201223`
+最后更新：`20210115`
 
 ## 项目代码仓库
 
@@ -45,7 +45,7 @@
 │   ├── gitbook_makefile.mk                 # 所有book共用的Makefile
 │   └── tools
 │       ├── generate_book_json.py           # 脚本，用于从book_current.json和common_book.json生成每个book的book.json
-│       ├── generate_book_json.py           # 脚本，用于从book_current.json和common_book.json生成每个book的book.json
+│       ├── generate_readme_md.py.py        # 脚本，用于从README_current.json获取配置信息，根据模板template_README.md，替换其中的{{xxx}}，去生成每个book的README.md
 │       └── sync_ReadmeCurrent_to_bookCurrent.py  # 脚本，用于从README_current.json同步gitRepoName、bookName、bookDescription到book_current.json
 │       └── update_crifan_github_io_readme.py  # 脚本，用于自动更新crifan的本地的github.io的README.md，更新最后更新日期和加上（如果缺失）当前book到gitbook列表
 ├── generated                               # 所有后续工具生成的各种文件都放到这里
@@ -400,6 +400,65 @@ scientific_network_summary
 
 ```
 
+### Google Adsense
+
+#### 支持Google Adsense自动广告
+
+在`book.json`中包含了插件`google-adsense`的话，会在`make init`（内部调用`gitbook init`）初始化安装对应插件到：
+
+`node_modules/gitbook-plugin-google-adsense/`
+
+如果想要支持 自动广告，则需要把其中的：
+
+`book/plugin.js`
+
+改为：
+
+```js
+require(["gitbook"], function(gitbook) {
+    gitbook.events.bind("start", function(e, pluginConfig) {
+        // console.log("=================== google-adsense start: pluginConfig=%o", pluginConfig);
+        configs = pluginConfig['google-adsense'].ads;
+        // console.log("configs=%o", configs);
+        firstConfig = configs[0]
+        firstClient = firstConfig.client
+        // console.log("firstClient=%o", firstClient);
+
+        // init script
+        var adScript = document.createElement('script');
+        adScript.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+        adScript.setAttribute('async', true);
+        adScript.setAttribute('data-ad-client', firstClient); // add for Google Adsense Auto Ads
+        // console.log("adScript=%o", adScript);
+        document.body.appendChild(adScript);
+    });
+});
+```
+
+即可。
+
+#### 把Google Adsense相关配置换成你自己的
+
+在发布之前，记得把其中的google adsense方面的配置，换成你自己的。
+
+涉及到的Google Adsense相关配置有：
+
+* `common/config/common/common_book.json`
+  ```json
+      "google-adsense": {
+        "ads": [
+          {
+              "client": "ca-pub-6626240105039250"
+          }
+        ]
+      },
+      ...
+      "ga": {
+        "token": "UA-28297199-1"
+      },
+  ```
+  * 把 `ca-pub-6626240105039250`和`UA-28297199-1`换成你自己的即可
+
 ### 此处的`book.json`和`REAMDME.md`是用脚本生成的
 
 此处的`gitbook_demo`的：
@@ -450,13 +509,13 @@ scientific_network_summary
 ➜  gitbook_demo git:(master) ✗ make help
 --------------------------------------------------------------------------------
 Author  : crifan.com
-Version : 20200908
+Version : 20210115
 Function: Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
                 Run 'make help' to see usage
 --------------------------------------------------------------------------------
-CURRENT_DIR=/Users/crifan/dev/dev_root/gitbook/gitbook_src_root/books/crack_assistant_xposed_framework
-BOOK_NAME=crack_assistant_xposed_framework
-NOT found crack_assistant_xposed_framework in IGNORE_FILE_CONTENT=
+CURRENT_DIR=/Users/crifan/dev/dev_root/gitbook/GitbookTemplate/gitbook_template/books/gitbook_demo
+BOOK_NAME=gitbook_demo
+NOT found gitbook_demo in IGNORE_FILE_CONTENT=
 
 Usage:
   make <target>
@@ -488,6 +547,7 @@ Targets:
   generate_readme_md        Generate README.md from ../README_template.md and README_current.json
   copy_readme               copy README.md to ./src
   copy_gitignore            copy common .gitignore
+  sync_readme_to_book       Sync README_current.json to book_current.json
   generate_book_json        Generate book.json from ../book_common.json and book_current.json
   sync_content              sync content
   install                   gitbook install plugins

@@ -11,6 +11,7 @@
     }
   },
   "plugins": [
+    "google-adsense",
     "theme-comscore",
     "anchors",
     "-lunr",
@@ -34,6 +35,13 @@
     "toolbar-button"
   ],
   "pluginsConfig": {
+    "google-adsense": {
+      "ads": [
+        {
+            "client": "ca-pub-6626240105039250"
+        }
+      ]
+    },
     "callouts": {
       "showTypeInHeader": false
 		},
