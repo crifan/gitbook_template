@@ -9,3 +9,6 @@ debug/
 
 generated/books/
 generated/gitbook/
+
+deploy_server_password.txt
+# common/config/deploy/deploy_server_password.txt
