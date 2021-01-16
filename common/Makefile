@@ -1,6 +1,6 @@
 # Function: Batch make for all gitbooks
 # Author: Crifan Li
-# Update: 20210115
+# Update: 20210116
 # Latest: https://github.com/crifan/gitbook_template/blob/master/common/Makefile
 # 
 # [Note]
@@ -12,7 +12,7 @@ SUB_BOOKS=$(shell ls ../books)
 BOOKS_SRC_ROOT=$(shell cd ../books && pwd)
 
 # Batch make for all gitbooks
-help debug_dir init sync_content clean_all website pdf epub mobi all upload commit deploy:
+help debug_dir init sync_content pull clean_all website pdf epub mobi all upload commit deploy:
 	@echo "Current path="`pwd`;
 	@echo "LS_OUTPUT="$(SUB_BOOKS);
 	@echo "BOOKS_SRC_ROOT="$(BOOKS_SRC_ROOT);

@@ -69,7 +69,7 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20200918
+Version=20210116
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
 RunHelp = Run 'make help' to see usage
 $(info --------------------------------------------------------------------------------)
@@ -284,6 +284,14 @@ install:
 ## gitbook init to install plugins
 init: sync_content install
 	@echo Compelete init all things
+
+################################################################################
+# Git Operation
+################################################################################
+
+## git pull to update to latest code
+pull:
+	git pull
 
 ################################################################################
 # Generate Files
