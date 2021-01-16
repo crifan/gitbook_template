@@ -1,9 +1,11 @@
-# Author: Crifan Li
 # Function: Batch make for all gitbooks
-# Version: 20190716
+# Author: Crifan Li
+# Update: 20210115
+# Latest: https://github.com/crifan/gitbook_template/blob/master/common/Makefile
 # 
 # [Note]
-# 1. this makefile should be located in
+# 1. this makefile should be located common folder:
+# /Users/crifan/dev/dev_root/gitbook/GitbookTemplate/gitbook_template/common/Makefile
 # /Users/crifan/dev/dev_root/gitbook/gitbook_src_root/common
 
 SUB_BOOKS=$(shell ls ../books)
