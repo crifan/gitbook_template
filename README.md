@@ -426,7 +426,8 @@ require(["gitbook"], function(gitbook) {
 
         // init script
         var adScript = document.createElement('script');
-        adScript.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+        // adScript.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+        adScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
         adScript.setAttribute('async', true);
         adScript.setAttribute('data-ad-client', firstClient); // add for Google Adsense Auto Ads
         // console.log("adScript=%o", adScript);
