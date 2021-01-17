@@ -1,5 +1,7 @@
 -include ../../common/config/deploy/deploy_server_info.mk
 
+# Latest: https://github.com/crifan/gitbook_template/blob/master/common/gitbook_makefile.mk
+
 ################################################################################
 # Global Config
 ################################################################################
