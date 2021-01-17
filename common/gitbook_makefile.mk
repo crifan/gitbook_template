@@ -4,20 +4,20 @@
 # Global Config
 ################################################################################
 
-ENABLE_COMMIT_GITHUB_IO = false
-# ENABLE_COMMIT_GITHUB_IO = true
+# ENABLE_COMMIT_GITHUB_IO = false
+ENABLE_COMMIT_GITHUB_IO = true
 
 ifeq ($(ENABLE_COMMIT_GITHUB_IO), true)
 # if need commit, enable and change to yours path
-# GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
-GITHUB_IO_PATH=/Users/limao/dev/crifan/crifan.github.io
+GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
+# GITHUB_IO_PATH=/Users/limao/dev/crifan/crifan.github.io
 
 # ENABLE_UPDATE_GITHUB_IO_README = false
 ENABLE_UPDATE_GITHUB_IO_README = true
 endif
 
-ENABLE_RSYNC_PROXY = false
-# ENABLE_RSYNC_PROXY = true
+# ENABLE_RSYNC_PROXY = false
+ENABLE_RSYNC_PROXY = true
 
 ifeq ($(ENABLE_RSYNC_PROXY), true)
 # for rsync use sock5 proxy
