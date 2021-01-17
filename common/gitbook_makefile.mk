@@ -4,28 +4,41 @@
 # Global Config
 ################################################################################
 
-# ENABLE_COMMIT_GITHUB_IO = false
+ENABLE_COMMIT_GITHUB_IO = false
+ENABLE_UPDATE_GITHUB_IO_README = false
+ENABLE_RSYNC_PROXY = false
+
+# default: rsync not use any proxy
+RSYNC_PROXY = 
+
+CURRENT_USER  := $(shell whoami)
+$(info CURRENT_USER=$(CURRENT_USER))
+ifeq ($(CURRENT_USER), crifan)
 ENABLE_COMMIT_GITHUB_IO = true
 
-ifeq ($(ENABLE_COMMIT_GITHUB_IO), true)
 # if need commit, enable and change to yours path
 GITHUB_IO_PATH=/Users/crifan/dev/dev_root/github/github.io/crifan.github.io
-# GITHUB_IO_PATH=/Users/limao/dev/crifan/crifan.github.io
 
-# ENABLE_UPDATE_GITHUB_IO_README = false
 ENABLE_UPDATE_GITHUB_IO_README = true
-endif
 
-# ENABLE_RSYNC_PROXY = false
 ENABLE_RSYNC_PROXY = true
+else ifeq ($(CURRENT_USER), limao)
+ENABLE_COMMIT_GITHUB_IO = true
+
+ENABLE_UPDATE_GITHUB_IO_README = true
+
+# if need commit, enable and change to yours path
+GITHUB_IO_PATH=/Users/limao/dev/crifan/crifan.github.io
+
+ENABLE_RSYNC_PROXY = true
+endif
+$(info ENABLE_COMMIT_GITHUB_IO=$(ENABLE_COMMIT_GITHUB_IO))
+$(info ENABLE_RSYNC_PROXY=$(ENABLE_RSYNC_PROXY))
 
 ifeq ($(ENABLE_RSYNC_PROXY), true)
 # for rsync use sock5 proxy
 PROXY_SOCK5 = 127.0.0.1:51837
 RSYNC_PROXY = -e "ssh -o 'ProxyCommand nc -X 5 -x $(PROXY_SOCK5) %h %p' -o ServerAliveInterval=30 -o ServerAliveCountMax=5"
-else
-# for rsync not use any proxy
-RSYNC_PROXY = 
 endif
 
 # Gitbook Debug Port and LiveReload Port
@@ -69,7 +82,7 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20210116
+Version=20210117
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
 RunHelp = Run 'make help' to see usage
 $(info --------------------------------------------------------------------------------)
@@ -127,7 +140,7 @@ MOBI_FULLNAME = $(MOBI_PATH)/$(MOBI_NAME)
 
 .DEFAULT_GOAL := deploy
 
-.PHONY : debug_makefile
+.PHONY : debug_makefile debug_nothing
 .PHONY : debug_dir debug_python debug debug_inlcude
 .PHONY : help
 .PHONY : create_folder_all create_folder_website create_folder_pdf create_folder_epub create_folder_mobi

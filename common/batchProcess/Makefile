@@ -45,13 +45,13 @@ $(info ----------------------------------------)
 # 	done;
 
 # Batch make for all gitbooks
-help debug_dir init sync_content pull clean_all website pdf epub mobi all upload commit deploy:
+help debug_nothing debug_dir init sync_content pull clean_all website pdf epub mobi all upload commit deploy:
 	@echo "Current path="`pwd`;
 	@echo "LS_OUTPUT="$(TO_PROCESS_BOOKS);
 	@echo "BOOKS_SRC_ROOT="$(BOOKS_SRC_ROOT);
 	@for each_item in $(TO_PROCESS_BOOKS); \
 	do \
-		if [ -d $(BOOKS_SRC_ROOT)/$$each_item ]; then \
+		if [ -f $(BOOKS_SRC_ROOT)/$$each_item/README.md ]; then \
 			cd $(BOOKS_SRC_ROOT)/$$each_item; \
 			# echo `pwd`; \
 			if [ -f Makefile ]; then \
@@ -59,5 +59,7 @@ help debug_dir init sync_content pull clean_all website pdf epub mobi all upload
 				make $@ || exit "$$?"; \
 			fi; \
 			cd ..; \
+		else \
+			echo Omit not-existed book src or non-folder: $$each_item; \
 		fi; \
 	done;
