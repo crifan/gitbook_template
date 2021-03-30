@@ -3,20 +3,7 @@
   "description": "crifan的Gitbook模版，用于演示如何用Gitbook创建一个自己的book电子书",
   "pluginsConfig": {
     "autocover": {
-      "title": "Gitbook演示",
-      "author": "Crifan Li <admin@crifan.com>",
-      "font": {
-        "size": null,
-        "family": "Impact",
-        "color": "#FFF"
-      },
-      "size": {
-        "w": 1800,
-        "h": 2360
-      },
-      "background": {
-        "color": "#09F"
-      }
+      "title": "Gitbook演示"
     },
     "github-buttons": {
       "buttons": [
@@ -129,7 +116,6 @@
     }
   },
   "plugins": [
-    "autocover",
     "google-adsense",
     "theme-comscore",
     "anchors",

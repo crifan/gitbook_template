@@ -11,7 +11,6 @@
     }
   },
   "plugins": [
-    "autocover",
     "google-adsense",
     "theme-comscore",
     "anchors",
@@ -36,22 +35,6 @@
     "toolbar-button"
   ],
   "pluginsConfig": {
-    "autocover": {
-      "title": "Crifan Li's Gitbook",
-      "author": "Crifan Li <admin@crifan.com>",
-      "font": {
-          "size": null,
-          "family": "Impact",
-          "color": "#FFF"
-      },
-      "size": {
-          "w": 1800,
-          "h": 2360
-      },
-      "background": {
-          "color": "#09F"
-      }
-    },
     "google-adsense": {
       "ads": [
         {
