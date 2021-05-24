@@ -3,7 +3,7 @@
 """
 Function: Generate gitbook markdown files from entry md file SUMMARY.md. if md existed, update md file time.
 Author: Crifan Li
-Update: 20210509
+Update: 20210524
 """
 
 import argparse
@@ -15,7 +15,7 @@ import random
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-f", "--md-file", type=str, required=True, help="full path of entry SUMMARY.md file")
 argParser.add_argument("--disable-update-existed-md", action='store_true', help="disable update existed md file modification time")
-argParser.add_argument("--enable-use-random-time", action='store_false', help="enable use random time for update time")
+argParser.add_argument("--disable-random-time", action='store_true', help="disable use random time for update time")
 argParser.add_argument("-r", "--random-range", type=int, default=10*60, help="for random time, the range. in seconds. default 600 = 10 minutes")
 args = argParser.parse_args()
 
@@ -26,7 +26,8 @@ summaryMdFullPath = args.md_file
 # isUpdateMdWhenExist = args.update_existed_md
 print("args.disable_update_existed_md=%s" % args.disable_update_existed_md)
 isUpdateMdWhenExist = not args.disable_update_existed_md
-isRandomUpdateTime = args.enable_use_random_time
+print("args.disable_random_time=%s" % args.disable_random_time)
+isRandomUpdateTime = not args.disable_random_time
 randomRange = args.random_range
 
 # # for debug

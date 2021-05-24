@@ -344,9 +344,11 @@ python ../../common/tools/generate_md_from_summary.py -f /Users/limao/dev/crifan
 
 python ../../common/tools/generate_md_from_summary.py --disable-update-existed-md -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/src/SUMMARY.md
 
-python ../../common/tools/generate_md_from_summary.py --enable-use-random-time -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/src/SUMMARY.md
+python ../../common/tools/generate_md_from_summary.py --disable-update-existed-md --disable-random-time -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/src/SUMMARY.md
 
-python ../../common/tools/generate_md_from_summary.py --enable-use-random-time --random-range 1200 -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/src/SUMMARY.md
+python ../../common/tools/generate_md_from_summary.py --random-range 1200 -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/src/SUMMARY.md
+
+python ../../common/tools/generate_md_from_summary.py -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/src/SUMMARY.md
 ```
 
 ### 指定debug的端口用于同时debug多个book
