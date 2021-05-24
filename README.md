@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20210116`
+最后更新：`20210524`
 
 ## 项目代码仓库
 
@@ -45,6 +45,7 @@
 │   ├── gitbook_makefile.mk                 # 所有book共用的Makefile
 │   └── tools
 │       ├── generate_book_json.py           # 脚本，用于从book_current.json和common_book.json生成每个book的book.json
+│       ├── generate_md_from_summary.py     # 脚本，用于从src/SUMMARY.md中生成对应md文件（以及更新已有md文件的最后修改时间）
 │       ├── generate_readme_md.py.py        # 脚本，用于从README_current.json获取配置信息，根据模板template_README.md，替换其中的{{xxx}}，去生成每个book的README.md
 │       └── sync_ReadmeCurrent_to_bookCurrent.py  # 脚本，用于从README_current.json同步gitRepoName、bookName、bookDescription到book_current.json
 │       └── update_crifan_github_io_readme.py  # 脚本，用于自动更新crifan的本地的github.io的README.md，更新最后更新日期和加上（如果缺失）当前book到gitbook列表
@@ -323,6 +324,30 @@ make deploy
 去发布，即可。
 
 ## 其他说明
+
+### 根据SUMMARY.md自动生成和更新子md文件
+
+已新增：`common/tools/generate_md_from_summary.py`
+
+作用：
+
+* 根据输入的`src/SUMMARY.md`的路径，自动更新对应book中的md文件
+  * 如果已存在该md文件：更新最后修改时间
+  * 如果不存在：新建该md文件
+
+用法举例：
+
+```bash
+python generate_md_from_summary.py -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/linux_usage_dev_summary/src/SUMMARY.md
+
+python ../../common/tools/generate_md_from_summary.py -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/src/SUMMARY.md
+
+python ../../common/tools/generate_md_from_summary.py --disable-update-existed-md -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/src/SUMMARY.md
+
+python ../../common/tools/generate_md_from_summary.py --enable-use-random-time -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/src/SUMMARY.md
+
+python ../../common/tools/generate_md_from_summary.py --enable-use-random-time --random-range 1200 -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/src/SUMMARY.md
+```
 
 ### 指定debug的端口用于同时debug多个book
 
