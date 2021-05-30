@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20210524`
+最后更新：`20210530`
 
 ## 项目代码仓库
 
@@ -349,6 +349,18 @@ python ../../common/tools/generate_md_from_summary.py --disable-update-existed-m
 python ../../common/tools/generate_md_from_summary.py --random-range 1200 -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/src/SUMMARY.md
 
 python ../../common/tools/generate_md_from_summary.py -f /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/src/SUMMARY.md
+
+
+Book root path:
+
+python ../../common/tools/generate_md_from_summary.py -e /Users/limao/dev/crifan/gitbook/gitbook_template/books/industrial_control_security_overview/
+
+python ../../common/tools/generate_md_from_summary.py -e /Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/
+
+Summary.md file:
+
+python ../../common/tools/generate_md_from_summary.py -e /Users/limao/dev/crifan/gitbook/gitbook_template/books/information_security_overview/src/SUMMARY.md
+
 ```
 
 ### 指定debug的端口用于同时debug多个book

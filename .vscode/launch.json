@@ -1,0 +1,30 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: 当前文件",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "-e",
+                // "/Users/limao/dev/crifan/gitbook/gitbook_template/books/information_security_overview/",
+                // "/Users/limao/dev/crifan/gitbook/gitbook_template/books/information_security_overview/src/SUMMARY.md",
+                // "/Users/limao/dev/crifan/gitbook/gitbook_template/books/grasp_hacker_track_security_analysis/",
+                // "/Users/limao/dev/crifan/gitbook/gitbook_template/books/grasp_hacker_track_security_analysis/src/SUMMARY.md",
+                // "/Users/limao/dev/crifan/gitbook/gitbook_template/books/industrial_control_security_overview/",
+                // "/Users/limao/dev/crifan/gitbook/gitbook_template/books/explore_underlying_mechanism_binary_security/",
+                // "/Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/",
+                "/Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/",
+                // "-m",
+                // "auto"
+                // "summary"
+                // "notExistOption"
+            ]
+        }
+    ]
+}
