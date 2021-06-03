@@ -17,3 +17,5 @@ deploy_server_password.txt
 books/**/*
 # include only single subfolder: gitbook_demo
 !books/gitbook_demo
+
+!common/backup/node_modules_selfMac.zip

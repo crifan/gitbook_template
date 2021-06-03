@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20210530`
+最后更新：`20210603`
 
 ## 项目代码仓库
 
@@ -32,6 +32,8 @@
 │           ├── README.md       # 同步拷贝自 上级目录中生成的README.md
 ......
 ├── common
+│   └── backup
+│       ├── node_modules_selfMac.zip        # 备份的自己的Mac中的node_modules
 │   ├── config
 │   │   ├── common
 │   │   │   ├── common_book.json            # 所有book的共用部分，用于生成每个book的book.json
@@ -324,6 +326,12 @@ make deploy
 去发布，即可。
 
 ## 其他说明
+
+### 备份的`node_modules_selfMac.zip`
+
+新增了`common/backup/node_modules_selfMac.zip`，是自己的Mac中的`generated/gitbook/node_modules`的压缩包
+
+作用：万一，自己的或别人node_modules的环境被破坏了，或者想要换电脑但快速搭建gitbook环境，则可以快速的直接用此`node_modules_selfMac.zip`，解压后替换/覆盖到`generated/gitbook/node_modules`，即可。
 
 ### 根据SUMMARY.md自动生成和更新子md文件
 
