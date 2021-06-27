@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Author: Crifan Li
-Version: v1.1 20190531
+Version: 20210627
 Function: Generate Gitbook's book.json from common_book.json and book_current.json
 Note: should run this python file from single gitbook foler
       eg: /Users/crifan/dev/dev_root/gitbook/gitbook_src_root/books/gitbook_demo
@@ -175,7 +175,8 @@ bookJsonTemplateFullPath = os.path.join(GitbookSrcRoot, "common/config/common" ,
 # print("bookJsonTemplateFullPath=%s" % bookJsonTemplateFullPath)
 # /Users/crifan/GitBook/Library/Import/book_common.json
 with open(bookJsonTemplateFullPath) as templateJsonFp:
-    templateJson = json.load(templateJsonFp, encoding="utf-8")
+    # templateJson = json.load(templateJsonFp, encoding="utf-8")
+    templateJson = json.load(templateJsonFp)
     # templateJson = json.load(templateJsonFp, encoding="utf-8", object_pairs_hook=OrderedDict)
     # templateJson = OrderedDict(templateJson)
     # print("type(templateJson)=%s" % (type(templateJson))) #type(templateJson)=<class 'collections.OrderedDict'>
@@ -183,7 +184,8 @@ with open(bookJsonTemplateFullPath) as templateJsonFp:
 bookJsonCurrentFullPath = os.path.join(CurrentBookPath, BookJsonCurrentFilename)
 # print("bookJsonCurrentFullPath=%s" % bookJsonCurrentFullPath)
 with open(bookJsonCurrentFullPath) as currentJsonFp:
-    currentJson = json.load(currentJsonFp, encoding="utf-8")
+    # currentJson = json.load(currentJsonFp, encoding="utf-8")
+    currentJson = json.load(currentJsonFp)
     # currentJson = json.load(currentJsonFp, encoding="utf-8", object_pairs_hook=OrderedDict)
     # currentJson = OrderedDict(currentJson)
 
