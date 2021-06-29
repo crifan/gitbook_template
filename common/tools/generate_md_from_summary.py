@@ -3,7 +3,7 @@
 """
 Function: Generate gitbook markdown files from entry md file SUMMARY.md. if md existed, update md file time.
 Author: Crifan Li
-Update: 20210530
+Update: 20210629
 """
 
 import argparse
@@ -140,7 +140,6 @@ def updateFileTime(fileOrFolderPath, newAccessTime=None, newModificationTime=Non
 
     os.utime(fileOrFolderPath, (newAccessTime, newModificationTime))
 
-
 def updateSingleFile(fileOrFolderFullPath, isUpdateFolderForFile=True):
     curDateTime = datetime.now() # datetime.datetime(2021, 5, 9, 16, 41, 9, 399425)
     curTimestamp = curDateTime.timestamp() # 1620549669.399425
@@ -183,8 +182,11 @@ print("args.disable_random_time=%s" % args.disable_random_time)
 isRandomUpdateTime = not args.disable_random_time
 randomRange = args.random_range
 
-# # for debug
+# for debug
 # entry = "/Users/limao/dev/crifan/gitbook/gitbook_template/books/linux_usage_dev_summary/src/SUMMARY.md"
+# entry = "/Users/limao/dev/crifan/gitbook/gitbook_template/books/android_app_security_crack/"
+# entry = "/Users/limao/dev/crifan/gitbook/gitbook_template/books/web_automation_tool_playwright"
+entry = "."
 # isUpdateMdWhenExist = True
 # isRandomUpdateTime = True
 # randomRange = 10 * 60 # in seconds
@@ -201,6 +203,10 @@ if mode == "auto":
     else:
         mode = "summary"
 print("mode=%s" % mode)
+
+# to support '.', convert to real full path
+entry = os.path.abspath(entry)
+print("entry=%s" % entry)
 
 if mode == "git":
     bookRootPath = entry
@@ -286,6 +292,51 @@ if mode == "git":
                     src/penetration_tool/port_scan/nmap/
 
             no changes added to commit (use "git add" and/or "git commit -a")
+        
+        (4)中文输出
+            您的分支与上游分支 'origin/master' 一致。
+
+            尚未暂存以备提交的变更：
+            （使用 "git add/rm <文件>..." 更新要提交的内容）
+            （使用 "git restore <文件>..." 丢弃工作区的改动）
+                    修改：     README.md
+                    修改：     README_current.json
+                    修改：     book.json
+                    修改：     book_current.json
+                    修改：     src/README.md
+                    修改：     src/SUMMARY.md
+                    修改：     src/android_background/related_info/apk_file.md
+...
+                    修改：     src/android_safety_tech/encrypt_overview/harden_method/common_harden_method.md
+                    修改：     src/appendix/reference.md
+
+            未跟踪的文件:
+            （使用 "git add <文件>..." 以包含要提交的内容）
+                    src/android_background/related_info/android_vm/
+                    src/android_background/related_info/smali.md
+...
+                    src/assets/img/jvm_vs_dvm_flow.png
+
+            修改尚未加入提交（使用 "git add" 和/或 "git commit -a"）
+
+        (5)中文输出：新git仓库
+             git status
+            位于分支 master
+
+            尚无提交
+
+            未跟踪的文件:
+            （使用 "git add <文件>..." 以包含要提交的内容）
+                    .gitignore
+                    Makefile
+                    README.md
+                    README_current.json
+                    book.json
+                    book_current.json
+                    node_modules
+                    src/
+
+            提交为空，但是存在尚未跟踪的文件（使用 "git add" 建立跟踪）
         """
         toUpdatFileDictList = []
 
@@ -293,7 +344,17 @@ if mode == "git":
 
         toUpdateStr = None
         notStagedStr = None
-        foundNotStagedStr = re.search("to discard changes in working directory\)\s+(?P<notStagedStr>.+?)\s+((Untracked files:)|(no changes added to commit))", cmdResult, flags=re.S)
+        discardChangeStrEn = "to discard changes in working directory\)"
+        discardChangeStrZhcn = "丢弃工作区的改动）"
+        untrackFileStrEn = "Untracked files"
+        untrackFileStrZhcn = "未跟踪的文件"
+        addCommitStrEn = "no changes added to commit"
+        addCommitStrZhcn = "修改尚未加入提交"
+        # foundNotStagedStr = re.search("to discard changes in working directory\)\s+(?P<notStagedStr>.+?)\s+((Untracked files:)|(no changes added to commit))", cmdResult, flags=re.S)
+        # notStagePatternStr = "((%s)|(%s))\)\s+(?P<notStagedStr>.+?)\s+((((%s)|(%s)):)|(((%s)|(%s))))" % (discardChangeStrEn, discardChangeStrZhcn, untrackFileStrEn, untrackFileStrZhcn, addCommitStrEn, addCommitStrZhcn)
+        notStagePatternStr = "((%s)|(%s))\s+(?P<notStagedStr>.+?)\s+((((%s)|(%s)):)|(((%s)|(%s))))" % (discardChangeStrEn, discardChangeStrZhcn, untrackFileStrEn, untrackFileStrZhcn, addCommitStrEn, addCommitStrZhcn)
+        print("notStagePatternStr=%s" % notStagePatternStr)
+        foundNotStagedStr = re.search(notStagePatternStr, cmdResult, flags=re.S)
         if foundNotStagedStr:
             notStagedStr = foundNotStagedStr.group("notStagedStr")
             print("notStagedStr=%s" % notStagedStr)
@@ -301,8 +362,14 @@ if mode == "git":
             notStagedLineList = notStagedStr.splitlines()
             print("notStagedLineList=%s" % notStagedLineList)
             for eachNotStageStr in notStagedLineList:
+                modifyStrEn = "modified:"
+                modifyStrZhcn = "修改："
+                deletedStrEn = "deleted:"
+                deletedStrZhcn = "删除："
                 # foundFile = re.search("\t(?P<action>(modified)|(deleted)):\s+(?P<filePath>\S+)$", eachNotStageStr)
-                foundFile = re.search("\t?(?P<action>(modified)|(deleted)):\s+(?P<filePath>\S+)$", eachNotStageStr)
+                actionFilePatternStr = "\t?(?P<action>(((%s)|(%s)))|(((%s)|(%s))))\s+(?P<filePath>\S+)$" % (modifyStrEn, modifyStrZhcn, deletedStrEn, deletedStrZhcn)
+                print("actionFilePatternStr=%s" % actionFilePatternStr)
+                foundFile = re.search(actionFilePatternStr, eachNotStageStr)
                 if foundFile:
                     action = foundFile.group("action") # 'modified'
                     filePath = foundFile.group("filePath") # 'README_current.json'
@@ -318,7 +385,14 @@ if mode == "git":
 
         untrackedStr = None
         untrackedFileDictList = []
-        foundUntrackedStr = re.search("to include in what will be committed\)\s+(?P<untrackedStr>.+?)\s+no changes added to commit", cmdResult, flags=re.S)
+        includeCommitedStrEn = "to include in what will be committed\)"
+        includeCommitedStrZhcn = "以包含要提交的内容）"
+        commitEmptyStrEn = "nothing added to commit but untracked files present"
+        commitEmptyStrZhcn = "提交为空，但是存在尚未跟踪的文件"
+        # foundUntrackedStr = re.search("to include in what will be committed\)\s+(?P<untrackedStr>.+?)\s+no changes added to commit", cmdResult, flags=re.S)
+        untrackedPatternStr = "((%s)|(%s))\s+(?P<untrackedStr>.+?)\s+((%s)|(%s)|(%s)|(%s))" % (includeCommitedStrEn, includeCommitedStrZhcn, addCommitStrEn, addCommitStrZhcn, commitEmptyStrEn , commitEmptyStrZhcn)
+        print("untrackedPatternStr=%s" % untrackedPatternStr)
+        foundUntrackedStr = re.search(untrackedPatternStr, cmdResult, flags=re.S)
         if foundUntrackedStr:
             untrackedStr = foundUntrackedStr.group("untrackedStr")
             print("untrackedStr=%s" % untrackedStr)
@@ -329,7 +403,8 @@ if mode == "git":
             for eachUntrackedLine in untrackedLineList:
                 # src/assets/img/zenmap_screenshot_detail.png
                 # src/penetration_tool/port_scan/nmap/
-                foundUntrackedFile = re.search("\t?(?P<untrackedFile>src/.+)$", eachUntrackedLine)
+                # foundUntrackedFile = re.search("\t?(?P<untrackedFile>src/.+)$", eachUntrackedLine)
+                foundUntrackedFile = re.search("\t?(?P<untrackedFile>src/.*)$", eachUntrackedLine)
                 if foundUntrackedFile:
                     untrackedFile = foundUntrackedFile.group("untrackedFile")
                     print("untrackedFile=%s" % untrackedFile)
@@ -351,7 +426,8 @@ if mode == "git":
                         for eachSubFullPath in allSubfolderFullPathList:
                             print("eachSubFullPath=%s" % eachSubFullPath)
                             subfolderItemDict = {
-                                "action": "added",
+                                # "action": "added",
+                                "action": "added:",
                                 "filePath": eachSubFullPath,
                             }
                             untrackedFileDictList.append(subfolderItemDict)
@@ -377,10 +453,12 @@ if mode == "git":
             else:
                 curFileFullPath = os.path.join(bookRootPath, curFilePath)
 
-            isModified = curAction == "modified"
-            isAdded = curAction == "added"
-
-            isDeleted = curAction == "deleted"
+            # isModified = curAction == "modified"
+            # isAdded = curAction == "added"
+            # isDeleted = curAction == "deleted"
+            isModified = (curAction == "modified:") or (curAction == "修改：")
+            isAdded = (curAction == "added:") or (curAction == "新增：")
+            isDeleted = (curAction == "deleted") or (curAction == "删除：")
 
             isNeedUpdate = isModified or isAdded
             isNeedUpdate = not isDeleted

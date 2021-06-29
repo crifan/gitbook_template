@@ -369,6 +369,10 @@ Summary.md file:
 
 python ../../common/tools/generate_md_from_summary.py -e /Users/limao/dev/crifan/gitbook/gitbook_template/books/information_security_overview/src/SUMMARY.md
 
+Unified all:
+
+python ../../common/tools/generate_md_from_summary.py -e .
+
 ```
 
 ### 指定debug的端口用于同时debug多个book
