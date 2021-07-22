@@ -104,21 +104,21 @@ if gitRepoName in OnlyUseGithubIoBookList:
   curBookRoot = BookRoot_github
 else:
   curBookRoot = BookRoot_crifan
-print("curBookRoot=%s" % curBookRoot)
+# print("curBookRoot=%s" % curBookRoot)
 # curBookRoot=crifan.github.io
 curBookRootPrefix = "https://%s/%s" % (curBookRoot, gitRepoName)
-print("curBookRootPrefix=%s" % curBookRootPrefix)
+# print("curBookRootPrefix=%s" % curBookRootPrefix)
 # curBookRootPrefix=https://crifan.github.io/scientific_network_summary
 
 # PrefixTemplate = "https://book.crifan.com/books/%s/website/"
 newPrefix = "%s/website/" % curBookRootPrefix
-print("newPrefix=%s" % newPrefix)
+# print("newPrefix=%s" % newPrefix)
 # newPrefix=https://crifan.github.io/scientific_network_summary/website/
 pluginsConfig["sitemap-general"]["prefix"] = newPrefix
 # UrlTemplate = "https://book.crifan.com/books/%s/pdf/%s.pdf"
 # newUrl = UrlTemplate % (gitRepoName, gitRepoName)
 newUrl = "%s/pdf/%s.pdf" % (curBookRootPrefix, gitRepoName)
-print("newUrl=%s" % newUrl)
+# print("newUrl=%s" % newUrl)
 # newUrl=https://crifan.github.io/scientific_network_summary/pdf/scientific_network_summary.pdf
 pluginsConfig["toolbar-button"]["url"] = newUrl
 
