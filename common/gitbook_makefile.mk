@@ -6,9 +6,12 @@
 # Global Config
 ################################################################################
 
-ENABLE_COMMIT_GITHUB_IO = false
-ENABLE_UPDATE_GITHUB_IO_README = false
-ENABLE_RSYNC_PROXY = false
+# ENABLE_COMMIT_GITHUB_IO = false
+# ENABLE_UPDATE_GITHUB_IO_README = false
+# ENABLE_RSYNC_PROXY = false
+ENABLE_COMMIT_GITHUB_IO = true
+ENABLE_UPDATE_GITHUB_IO_README = true
+ENABLE_RSYNC_PROXY = true
 
 # default: rsync not use any proxy
 RSYNC_PROXY = 

@@ -19,7 +19,8 @@
                 // "/Users/limao/dev/crifan/gitbook/gitbook_template/books/industrial_control_security_overview/",
                 // "/Users/limao/dev/crifan/gitbook/gitbook_template/books/explore_underlying_mechanism_binary_security/",
                 // "/Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/",
-                "/Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/",
+                // "/Users/limao/dev/crifan/gitbook/gitbook_template/books/infiltrate_your_net_penetration_testing/",
+                ".",
                 // "-m",
                 // "auto"
                 // "summary"

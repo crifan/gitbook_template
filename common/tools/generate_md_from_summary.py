@@ -3,7 +3,7 @@
 """
 Function: Generate gitbook markdown files from entry md file SUMMARY.md. if md existed, update md file time.
 Author: Crifan Li
-Update: 20210629
+Update: 20210720
 """
 
 import argparse
@@ -186,7 +186,7 @@ randomRange = args.random_range
 # entry = "/Users/limao/dev/crifan/gitbook/gitbook_template/books/linux_usage_dev_summary/src/SUMMARY.md"
 # entry = "/Users/limao/dev/crifan/gitbook/gitbook_template/books/android_app_security_crack/"
 # entry = "/Users/limao/dev/crifan/gitbook/gitbook_template/books/web_automation_tool_playwright"
-entry = "."
+# entry = "."
 # isUpdateMdWhenExist = True
 # isRandomUpdateTime = True
 # randomRange = 10 * 60 # in seconds
@@ -203,6 +203,9 @@ if mode == "auto":
     else:
         mode = "summary"
 print("mode=%s" % mode)
+
+# # for debug
+# entry = "/Users/limao/dev/crifan/gitbook/gitbook_template/books/guard_your_car_safety"
 
 # to support '.', convert to real full path
 entry = os.path.abspath(entry)
@@ -470,6 +473,12 @@ if mode == "git":
     else:
         print("! Failed to get output for command: %s" % fullGitCmd)
 elif mode == "summary":
+    if os.path.isdir(entry):
+        # is foler root path, add SUMMARY.md
+        SRC_FOLDER = "src"
+        SUMMARY_FILE = "SUMMARY.md"
+        entry = os.path.join(entry, SRC_FOLDER, SUMMARY_FILE)
+
     summaryMdFile = entry
 
     bookSrcPath = os.path.dirname(entry)

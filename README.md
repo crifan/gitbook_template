@@ -393,9 +393,16 @@ Summary.md file:
 
 python ../../common/tools/generate_md_from_summary.py -e /Users/limao/dev/crifan/gitbook/gitbook_template/books/information_security_overview/src/SUMMARY.md
 
-Unified all:
+
+20210720 Unified all:
+
+for update md:
 
 python ../../common/tools/generate_md_from_summary.py -e .
+
+for generate md:
+
+python ../../common/tools/generate_md_from_summary.py -e . -m summary
 
 ```
 
