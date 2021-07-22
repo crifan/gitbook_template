@@ -127,12 +127,12 @@
       "wechatText": "微信打赏给Crifan"
     },
     "sitemap-general": {
-      "prefix": "https://book.crifan.com/gitbook/gitbook_name/website/"
+      "prefix": "https://book.crifan.com/books/gitbook_name/website/"
     },
     "toolbar-button": {
       "icon": "fa-file-pdf-o",
       "label": "下载PDF",
-      "url": "http://book.crifan.com/books/gitbook_name/pdf/gitbook_name.pdf"
+      "url": "https://book.crifan.com/books/gitbook_name/pdf/gitbook_name.pdf"
     }
   }
 }

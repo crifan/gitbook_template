@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20210603`
+最后更新：`20210722`
 
 ## 项目代码仓库
 
@@ -326,6 +326,30 @@ make deploy
 去发布，即可。
 
 ## 其他说明
+
+### 特殊处理：OnlyUseGithubIoBookList
+
+如果想要对部分特殊的book：
+
+只发布到github.io，而不发布到自己网站(book.crifan.com)中
+
+则可以去更新：
+
+* `common/tools/generate_readme_md.py`
+* `common/tools/sync_ReadmeCurrent_to_bookCurrent.py`
+
+中的：
+
+```python
+OnlyUseGithubIoBookList = [
+  "scientific_network_summary",
+]
+
+BookRoot_crifan = "book.crifan.com/books"
+BookRoot_github = "crifan.github.io"
+```
+
+更新为自己的book的repo的name即可。
 
 ### 备份的`node_modules_selfMac.zip`
 

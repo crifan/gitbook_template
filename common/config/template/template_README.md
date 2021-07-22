@@ -21,14 +21,14 @@
 
 ### 在线浏览
 
-* [{{bookName}} book.crifan.com](http://book.crifan.com/books/{{gitRepoName}}/website)
+* [{{bookName}} book.crifan.com](https://book.crifan.com/books/{{gitRepoName}}/website)
 * [{{bookName}} crifan.github.io](https://crifan.github.io/{{gitRepoName}}/website)
 
 ### 离线下载阅读
 
-* [{{bookName}} PDF](http://book.crifan.com/books/{{gitRepoName}}/pdf/{{gitRepoName}}.pdf)
-* [{{bookName}} ePub](http://book.crifan.com/books/{{gitRepoName}}/epub/{{gitRepoName}}.epub)
-* [{{bookName}} Mobi](http://book.crifan.com/books/{{gitRepoName}}/mobi/{{gitRepoName}}.mobi)
+* [{{bookName}} PDF](https://book.crifan.com/books/{{gitRepoName}}/pdf/{{gitRepoName}}.pdf)
+* [{{bookName}} ePub](https://book.crifan.com/books/{{gitRepoName}}/epub/{{gitRepoName}}.epub)
+* [{{bookName}} Mobi](https://book.crifan.com/books/{{gitRepoName}}/mobi/{{gitRepoName}}.mobi)
 
 ## 版权说明
 

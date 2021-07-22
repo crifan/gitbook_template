@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Author: Crifan Li
-Version: v1.2 20190531
+Version: 20210722
 Function: Generate Gitbook's README.md from template_README.md and README_current.json
 Note: should run this python file from single gitbook foler
         eg: /Users/crifan/dev/dev_root/gitbook/gitbook_src_root/books/gitbook_demo
@@ -22,6 +22,13 @@ gReadmeCurrentFilename = "README_current.json"
 gReadmeOutputFilename = "README.md"
 # # for debug
 # gReadmeOutputFilename = "README_tmp_generated.md"
+
+# Speical: only use crifan.github.io, not use book.crifan.com/books
+OnlyUseGithubIoBookList = [
+    "scientific_network_summary",
+]
+BookRoot_crifan = "book.crifan.com/books"
+BookRoot_github = "crifan.github.io"
 
 ################################################################################
 # Internal Function
@@ -84,6 +91,7 @@ def generateReadmeMd():
     readmeCurrentJson = loadJsonFromFile(readmeCurrentFullPath)
     # print("readmeCurrentJson=%s" % readmeCurrentJson)
 
+    gitRepoName = None
     for eachKey in readmeCurrentJson.keys():
         # print("eachKey=%s" % eachKey)
         patternToReplace = "\{\{%s\}\}" % eachKey
@@ -91,6 +99,29 @@ def generateReadmeMd():
         # print("patternToReplace=%s -> replacedStr=%s" % (patternToReplace, replacedStr))
         readmeTemplateMdStr = re.sub(patternToReplace, replacedStr, readmeTemplateMdStr)
         # print("readmeTemplateMdStr=%s" % readmeTemplateMdStr)
+
+        if eachKey == "gitRepoName":
+            gitRepoName = replacedStr
+            print("Found gitRepoName=%s" % gitRepoName)
+
+    # special process
+    if gitRepoName in OnlyUseGithubIoBookList:
+        # (1) remove line:
+        # * [科学上网相关知识总结 book.crifan.com](https://book.crifan.com/books/scientific_network_summary/website)
+        # print("before: readmeTemplateMdStr=%s" % readmeTemplateMdStr)
+        # onlineReadBookCrifanLinePattern = "^ \*.+?book\.crifan\.com\]\(.+?$"
+        onlineReadBookCrifanLinePattern = "^\*.+?book\.crifan\.com\]\(.+?$\n"
+        # foundOnlineReadBookCrifanLine = re.search(onlineReadBookCrifanLinePattern, readmeTemplateMdStr, flags=re.M)
+        # print("foundOnlineReadBookCrifanLine=%s" % foundOnlineReadBookCrifanLine)
+        readmeTemplateMdStr = re.sub(onlineReadBookCrifanLinePattern, "", readmeTemplateMdStr, flags=re.M)
+        print("after remove read online crifan book: readmeTemplateMdStr=%s" % readmeTemplateMdStr)
+
+        # (2) replace book path
+        # book.crifan.com/books -> crifan.github.io
+        BookRootCrifanPattern = BookRoot_crifan.replace(".", "\.")
+        BookRootGithubPattern = BookRoot_github
+        readmeTemplateMdStr = re.sub(BookRootCrifanPattern, BookRootGithubPattern, readmeTemplateMdStr)
+        print("after replaced book path: readmeTemplateMdStr=%s" % readmeTemplateMdStr)
 
     generatedReadmeFullPath = os.path.join(curBookPath, gReadmeOutputFilename)
     # print("generatedReadmeFullPath=%s" % generatedReadmeFullPath)

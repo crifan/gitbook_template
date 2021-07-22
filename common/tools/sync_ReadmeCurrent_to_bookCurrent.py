@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Author: Crifan Li
-Update: 20200915
+Update: 20210722
 Function: Sync README_current.json content to book_current.json
 Note: should run this python file from single gitbook foler
       eg: /Users/crifan/dev/dev_root/gitbook/gitbook_src_root/books/gitbook_demo
@@ -19,6 +19,14 @@ from pprint import pprint
 
 ReadmeCurrentJsonFilename = "README_current.json"
 BookCurrentJsonFilename = "book_current.json"
+
+# Speical: only use crifan.github.io, not use book.crifan.com/books
+OnlyUseGithubIoBookList = [
+  "scientific_network_summary",
+]
+
+BookRoot_crifan = "book.crifan.com/books"
+BookRoot_github = "crifan.github.io"
 
 ################################################################################
 # Internal Function
@@ -92,13 +100,26 @@ pluginsConfig = bookCurrentJson["pluginsConfig"]
 # print("pluginsConfig=%s" % pluginsConfig)
 pluginsConfig["github-buttons"]["buttons"][0]["repo"] = gitRepoName
 
-PrefixTemplate = "https://book.crifan.com/gitbook/%s/website/"
-newPrefix = PrefixTemplate % gitRepoName
-# print("newPrefix=%s" % newPrefix)
+if gitRepoName in OnlyUseGithubIoBookList:
+  curBookRoot = BookRoot_github
+else:
+  curBookRoot = BookRoot_crifan
+print("curBookRoot=%s" % curBookRoot)
+# curBookRoot=crifan.github.io
+curBookRootPrefix = "https://%s/%s" % (curBookRoot, gitRepoName)
+print("curBookRootPrefix=%s" % curBookRootPrefix)
+# curBookRootPrefix=https://crifan.github.io/scientific_network_summary
+
+# PrefixTemplate = "https://book.crifan.com/books/%s/website/"
+newPrefix = "%s/website/" % curBookRootPrefix
+print("newPrefix=%s" % newPrefix)
+# newPrefix=https://crifan.github.io/scientific_network_summary/website/
 pluginsConfig["sitemap-general"]["prefix"] = newPrefix
-UrlTemplate = "http://book.crifan.com/books/%s/pdf/%s.pdf"
-newUrl = UrlTemplate % (gitRepoName, gitRepoName)
-# print("newUrl=%s" % newUrl)
+# UrlTemplate = "https://book.crifan.com/books/%s/pdf/%s.pdf"
+# newUrl = UrlTemplate % (gitRepoName, gitRepoName)
+newUrl = "%s/pdf/%s.pdf" % (curBookRootPrefix, gitRepoName)
+print("newUrl=%s" % newUrl)
+# newUrl=https://crifan.github.io/scientific_network_summary/pdf/scientific_network_summary.pdf
 pluginsConfig["toolbar-button"]["url"] = newUrl
 
 # print("Updated %s:" % BookCurrentJsonFilename)
