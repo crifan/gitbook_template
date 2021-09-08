@@ -3,21 +3,34 @@
 # Latest: https://github.com/crifan/gitbook_template/blob/master/common/gitbook_makefile.mk
 
 ################################################################################
-# Global Config
+# System Value
 ################################################################################
-
-# ENABLE_COMMIT_GITHUB_IO = false
-# ENABLE_UPDATE_GITHUB_IO_README = false
-# ENABLE_RSYNC_PROXY = false
-ENABLE_COMMIT_GITHUB_IO = true
-ENABLE_UPDATE_GITHUB_IO_README = true
-ENABLE_RSYNC_PROXY = true
-
-# default: rsync not use any proxy
-RSYNC_PROXY = 
 
 CURRENT_USER  := $(shell whoami)
 $(info CURRENT_USER=$(CURRENT_USER))
+
+################################################################################
+# Global Config
+################################################################################
+
+ENABLE_DEPLOY_SERVER = false
+ENABLE_COMMIT_GITHUB_IO = false
+ENABLE_UPDATE_GITHUB_IO_README = false
+ENABLE_RSYNC_PROXY = false
+
+# ENABLE_DEPLOY_SERVER = true
+# ENABLE_COMMIT_GITHUB_IO = true
+# ENABLE_UPDATE_GITHUB_IO_README = true
+# ENABLE_RSYNC_PROXY = true
+
+# default: rsync not use any proxy
+RSYNC_PROXY = 
+RSYNC_PARAMS = 
+
+################################################################################
+# Generated Config
+################################################################################
+
 ifeq ($(CURRENT_USER), crifan)
 ENABLE_COMMIT_GITHUB_IO = true
 
@@ -37,8 +50,6 @@ GITHUB_IO_PATH=/Users/limao/dev/crifan/crifan.github.io
 
 ENABLE_RSYNC_PROXY = true
 endif
-$(info ENABLE_COMMIT_GITHUB_IO=$(ENABLE_COMMIT_GITHUB_IO))
-$(info ENABLE_RSYNC_PROXY=$(ENABLE_RSYNC_PROXY))
 
 ifeq ($(ENABLE_RSYNC_PROXY), true)
 # for rsync use sock5 proxy
@@ -46,21 +57,57 @@ PROXY_SOCK5 = 127.0.0.1:51837
 RSYNC_PROXY = -e "ssh -o 'ProxyCommand nc -X 5 -x $(PROXY_SOCK5) %h %p' -o ServerAliveInterval=30 -o ServerAliveCountMax=5"
 endif
 
+ifneq ($(RSYNC_PROXY), )
+RSYNC_PARAMS = $(RSYNC_PROXY) -avzh --progress --stats --delete --force
+endif
+
 # Gitbook Debug Port and LiveReload Port
 GITBOOK_DEBUG_PORT ?= 4000
 GITBOOK_DEBUG_LRPORT ?= 35729
 
+### Upload to server ###
+
+ifeq ($(ENABLE_DEPLOY_SERVER), true)
 # if need upload/deploy, update content of these file
 DEPLOY_SERVER_PASSWORD_FILE=$(GITBOOK_ROOT_COMMON)/config/deploy/deploy_server_password.txt
 DEPLOY_IGNORE_FILE=$(GITBOOK_ROOT_COMMON)/config/deploy/deploy_ignore_book_list.txt
+endif
 
 COMMON_GITIGNORE_FILE=$(GITBOOK_ROOT_COMMON)/config/common/common_gitignore
+
+ifeq ($(ENABLE_DEPLOY_SERVER), true)
+
+# ifneq ("$(wildcard $(DEPLOY_IGNORE_FILE))", "")
+ifneq ($(wildcard $(DEPLOY_IGNORE_FILE)), )
+$(info $(DEPLOY_IGNORE_FILE) is exist, not empty)
+IGNORE_FILE_CONTENT := $(shell cat $(DEPLOY_IGNORE_FILE))
+# IGNORE_FILE_CONTENT := $(file < $(DEPLOY_IGNORE_FILE))
+
+FOUND_BOOK := $(findstring $(BOOK_NAME), $(IGNORE_FILE_CONTENT))
+$(info FOUND_BOOK=$(FOUND_BOOK))
+endif
+
+ifeq ($(FOUND_BOOK), )
+$(info NOT found $(BOOK_NAME) in IGNORE_FILE_CONTENT=$(IGNORE_FILE_CONTENT))
+SHOULD_IGNORE_DEPLOY_SERVER = false
+else
+$(info IS found $(BOOK_NAME) in $(IGNORE_FILE_CONTENT))
+SHOULD_IGNORE_DEPLOY_SERVER = true
+endif
+
+endif
+
+$(info ---Current Config---)
+$(info ENABLE_COMMIT_GITHUB_IO=$(ENABLE_COMMIT_GITHUB_IO))
+$(info ENABLE_UPDATE_GITHUB_IO_README=$(ENABLE_UPDATE_GITHUB_IO_README))
+$(info ENABLE_DEPLOY_SERVER=$(ENABLE_DEPLOY_SERVER))
+$(info ENABLE_RSYNC_PROXY=$(ENABLE_RSYNC_PROXY))
+$(info RSYNC_PROXY=$(RSYNC_PROXY))
+$(info RSYNC_PARAMS=$(RSYNC_PARAMS))
 
 ################################################################################
 # Global defines
 ################################################################################
-
-RSYNC_PARAMS = $(RSYNC_PROXY) -avzh --progress --stats --delete --force
 
 GENERATE_BOOK_JSON_FILE=$(GITBOOK_ROOT_COMMON)/tools/generate_book_json.py
 GENERATE_README_MD_FILE=$(GITBOOK_ROOT_COMMON)/tools/generate_readme_md.py
@@ -87,13 +134,14 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20210117
+Version=20210908
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
 RunHelp = Run 'make help' to see usage
+GitRepo = Latest version: https://github.com/crifan/gitbook_template
 $(info --------------------------------------------------------------------------------)
 $(info ${YELLOW}Author${RESET}  : ${GREEN}$(Author)${RESET})
 $(info ${YELLOW}Version${RESET} : ${GREEN}$(Version)${RESET})
-$(info ${YELLOW}Function${RESET}: ${GREEN}$(Function)$(NEWLINE)$(TAB)$(TAB)$(RunHelp)${RESET})
+$(info ${YELLOW}Function${RESET}: ${GREEN}$(Function)$(NEWLINE)$(TAB)$(TAB)$(RunHelp)$(NEWLINE)$(TAB)$(TAB)$(GitRepo)${RESET})
 $(info --------------------------------------------------------------------------------)
 
 
@@ -367,36 +415,14 @@ all: website pdf epub mobi
 # Upload to server
 ################################################################################
 
-SHOULD_IGNORE = false
-
-# ifneq ("$(wildcard $(DEPLOY_IGNORE_FILE))", "")
-ifneq ($(wildcard $(DEPLOY_IGNORE_FILE)), )
-# $(info $(DEPLOY_IGNORE_FILE) is exist, not empty)
-IGNORE_FILE_CONTENT := $(shell cat $(DEPLOY_IGNORE_FILE))
-# IGNORE_FILE_CONTENT := $(file < $(DEPLOY_IGNORE_FILE))
-
-FOUND_BOOK := $(findstring $(BOOK_NAME), $(IGNORE_FILE_CONTENT))
-# $(info FOUND_BOOK=$(FOUND_BOOK))
-
-# ifeq ("$(FOUND_BOOK)", "")
-ifeq ($(FOUND_BOOK), )
-$(info NOT found $(BOOK_NAME) in IGNORE_FILE_CONTENT=$(IGNORE_FILE_CONTENT))
-SHOULD_IGNORE = false
-else
-$(info IS found $(BOOK_NAME) in $(IGNORE_FILE_CONTENT))
-SHOULD_IGNORE = true
-endif
-
-endif
-
 ## Upload all genereted website/pdf/epub/mobi files to remote server using rsync. Create deploy_server_info.mk and deploy_server_password.txt which contain deploy server IP+User+Path and Password before use this
 upload: all
 	@echo ================================================================================
-ifeq ($(SHOULD_IGNORE), true)
-	@echo Ignore upload $(BOOK_NAME) to book.crifan.com
-else
+ifeq ($(ENABLE_DEPLOY_SERVER), true)
 	@echo Upload for $(BOOK_NAME)
 	sshpass -f $(DEPLOY_SERVER_PASSWORD_FILE) rsync $(RSYNC_PARAMS) $(RELEASE_PATH) $(DEPLOY_SERVER_USER)@$(DEPLOY_SERVER_IP):$(DEPLOY_SERVER_PATH)
+else
+	@echo Disabled deploy $(BOOK_NAME) to server $(DEPLOY_SERVER_IP)
 endif
 
 
@@ -442,7 +468,8 @@ ifeq ($(ENABLE_COMMIT_GITHUB_IO), true)
 	git push && \
 	pwd && \
 	cd $(CURRENT_DIR) && \
-	pwd
+	pwd && \
+	git remote -v
 else
 	@echo Ignored commit $(BOOK_NAME) to github.io
 endif
