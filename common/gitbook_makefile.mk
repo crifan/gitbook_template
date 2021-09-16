@@ -474,7 +474,6 @@ ifeq ($(ENABLE_COMMIT_GITHUB_IO), true)
 	cd $(CURRENT_DIR) && \
 	pwd && \
 	git remote -v
-	git remote -v
 else
 	@echo Ignored commit $(BOOK_NAME) to github.io
 endif
