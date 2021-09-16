@@ -134,7 +134,7 @@ endef
 # Output current makefile info
 ################################################################################
 Author=crifan.com
-Version=20210908
+Version=20210916
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
 RunHelp = Run 'make help' to see usage
 GitRepo = Latest version: https://github.com/crifan/gitbook_template
@@ -359,6 +359,10 @@ init: sync_content install
 pull:
 	git pull
 
+## git status
+status:
+	git status
+
 ################################################################################
 # Generate Files
 ################################################################################
@@ -470,12 +474,10 @@ ifeq ($(ENABLE_COMMIT_GITHUB_IO), true)
 	cd $(CURRENT_DIR) && \
 	pwd && \
 	git remote -v
+	git remote -v
 else
 	@echo Ignored commit $(BOOK_NAME) to github.io
 endif
-
-
-
 
 ################################################################################
 # Deploy generated files to remote server and github.io repo

@@ -1,7 +1,7 @@
 # Function: Batch make for all gitbooks
 # Author: Crifan Li
-# Update: 20210117
-# Latest: https://github.com/crifan/gitbook_template/blob/master/common/Makefile
+# Update: 20210916
+# Latest: https://github.com/crifan/gitbook_template/blob/master/common/batchProcess/Makefile
 # 
 # [Note]
 # 1. this makefile should be located common batchProcess folder:
@@ -44,8 +44,12 @@ $(info ----------------------------------------)
 # 		fi; \
 # 	done;
 
+
+# echo `pwd`; \
+# echo $$each_item; \
+
 # Batch make for all gitbooks
-help debug_nothing debug_dir init sync_content pull clean_all website pdf epub mobi all upload commit deploy:
+help debug_nothing debug_dir init sync_content pull status clean_all website pdf epub mobi all upload commit deploy:
 	@echo "Current path="`pwd`;
 	@echo "LS_OUTPUT="$(TO_PROCESS_BOOKS);
 	@echo "BOOKS_SRC_ROOT="$(BOOKS_SRC_ROOT);
@@ -53,9 +57,7 @@ help debug_nothing debug_dir init sync_content pull clean_all website pdf epub m
 	do \
 		if [ -f $(BOOKS_SRC_ROOT)/$$each_item/README.md ]; then \
 			cd $(BOOKS_SRC_ROOT)/$$each_item; \
-			# echo `pwd`; \
 			if [ -f Makefile ]; then \
-				# echo $$each_item; \
 				make $@ || exit "$$?"; \
 			fi; \
 			cd ..; \
