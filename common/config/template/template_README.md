@@ -21,18 +21,18 @@
 
 ### 在线浏览
 
-* [{{bookName}} book.crifan.com](https://book.crifan.com/books/{{gitRepoName}}/website)
+* [{{bookName}} book.crifan.org](https://book.crifan.org/books/{{gitRepoName}}/website)
 * [{{bookName}} crifan.github.io](https://crifan.github.io/{{gitRepoName}}/website)
 
 ### 离线下载阅读
 
-* [{{bookName}} PDF](https://book.crifan.com/books/{{gitRepoName}}/pdf/{{gitRepoName}}.pdf)
-* [{{bookName}} ePub](https://book.crifan.com/books/{{gitRepoName}}/epub/{{gitRepoName}}.epub)
-* [{{bookName}} Mobi](https://book.crifan.com/books/{{gitRepoName}}/mobi/{{gitRepoName}}.mobi)
+* [{{bookName}} PDF](https://book.crifan.org/books/{{gitRepoName}}/pdf/{{gitRepoName}}.pdf)
+* [{{bookName}} ePub](https://book.crifan.org/books/{{gitRepoName}}/epub/{{gitRepoName}}.epub)
+* [{{bookName}} Mobi](https://book.crifan.org/books/{{gitRepoName}}/mobi/{{gitRepoName}}.mobi)
 
 ## 版权说明
 
-此电子书教程的全部内容，如无特别说明，均为本人原创和整理。其中部分内容参考自网络，均已备注了出处。如有发现侵犯您版权，请通过邮箱联系我 `admin 艾特 crifan.com`，我会尽快删除。谢谢合作。
+此电子书教程的全部内容，如无特别说明，均为本人原创和整理。其中部分内容参考自网络，均已备注了出处。如有发现侵犯您版权，请通过邮箱联系我 `admin 艾特 crifan.org`，我会尽快删除。谢谢合作。
 
 ## 鸣谢
 

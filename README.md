@@ -1,6 +1,6 @@
 # Gitbook模板
 
-最后更新：`20210722`
+最后更新：`20210918`
 
 ## 项目代码仓库
 
@@ -9,7 +9,7 @@
 ## 项目作用
 
 1. 用于演示如何使用`crifan`的**gitbook模板**
-2. 别人和自己，可以基于此模板，快速方便的创建出自己的[gitbook](https://book.crifan.com/books/ebook_system_gitbook/website/)电子书
+2. 别人和自己，可以基于此模板，快速方便的创建出自己的[gitbook](https://book.crifan.org/books/ebook_system_gitbook/website/)电子书
 
 ## 项目结构
 
@@ -69,11 +69,11 @@
 
 此模板从无到有的过程，感兴趣的可以去看看：
 
-* [【已解决】提取Gitbook中Makefile公共部分](http://www.crifan.com/gitbook_extract_common_part_of_makefile)
-* [【已解决】gitbook中book.json中能否把公共部分提取出来](http://www.crifan.com/gitbook_extract_book_json_common_part)
-* [【基本解决】Makefile中从独立文件比如json中读取配置变量](http://www.crifan.com/makefile_import_read_config_variable_from_file_like_json)
-* [【规避解决】gitbook install时能否指定node_modules的安装路径](http://www.crifan.com/gitbook_install_whether_designate_node_modules_install_path)
-* [【已解决】优化gitbook的生成book模板提取共用的node_modules](http://www.crifan.com/optimize_gitbook_generate_book_template_extract_common_node_modules)
+* [【已解决】提取Gitbook中Makefile公共部分](http://www.crifan.org/gitbook_extract_common_part_of_makefile)
+* [【已解决】gitbook中book.json中能否把公共部分提取出来](http://www.crifan.org/gitbook_extract_book_json_common_part)
+* [【基本解决】Makefile中从独立文件比如json中读取配置变量](http://www.crifan.org/makefile_import_read_config_variable_from_file_like_json)
+* [【规避解决】gitbook install时能否指定node_modules的安装路径](http://www.crifan.org/gitbook_install_whether_designate_node_modules_install_path)
+* [【已解决】优化gitbook的生成book模板提取共用的node_modules](http://www.crifan.org/optimize_gitbook_generate_book_template_extract_common_node_modules)
 
 ## 使用步骤
 
@@ -123,7 +123,7 @@ gitbook有个bug：
 
 具体步骤，详见：
 
-* [【已解决】gitbook编译偶尔报错：Error ENOENT no such file or directory stat](http://www.crifan.com/gitbook_compile_occasionally_error_enoent_no_such_file_or_directory_stat)
+* [【已解决】gitbook编译偶尔报错：Error ENOENT no such file or directory stat](http://www.crifan.org/gitbook_compile_occasionally_error_enoent_no_such_file_or_directory_stat)
 
 ### 下载模板源码
 
@@ -161,7 +161,7 @@ make debug
 
 ![Gitbook的各种hint/callout提示的效果](img/gitbook_various_hint_callout_effect.png)
 
-然后就可以去用编辑器，比如[VSCode](https://book.crifan.com/books/best_editor_vscode/website/)，去编辑和更新自己的`markdown`=`md`源码了，然后gitbook会自动检测到文件变动，刷新页面。
+然后就可以去用编辑器，比如[VSCode](https://book.crifan.org/books/best_editor_vscode/website/)，去编辑和更新自己的`markdown`=`md`源码了，然后gitbook会自动检测到文件变动，刷新页面。
 
 ### 生成静态文件：`html`,`pdf`,`epub`,`mobi`
 
@@ -254,7 +254,7 @@ your_server_password
 ```make
 DEPLOY_SERVER_IP=149.28.136.189
 DEPLOY_SERVER_USER=root
-DEPLOY_SERVER_PATH=/data/wwwroot/book.crifan.com/books
+DEPLOY_SERVER_PATH=/data/wwwroot/book.crifan.org/books
 ```
 
 和
@@ -331,7 +331,7 @@ make deploy
 
 如果想要对部分特殊的book：
 
-只发布到github.io，而不发布到自己网站(book.crifan.com)中
+只发布到github.io，而不发布到自己网站(book.crifan.org)中
 
 则可以去更新：
 
@@ -345,7 +345,7 @@ OnlyUseGithubIoBookList = [
   "scientific_network_summary",
 ]
 
-BookRoot_crifan = "book.crifan.com/books"
+BookRoot_crifan = "book.crifan.org/books"
 BookRoot_github = "crifan.github.io"
 ```
 
@@ -591,7 +591,7 @@ require(["gitbook"], function(gitbook) {
 ```bash
 ➜  gitbook_demo git:(master) ✗ make help
 --------------------------------------------------------------------------------
-Author  : crifan.com
+Author  : crifan.org
 Version : 20210115
 Function: Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
                 Run 'make help' to see usage

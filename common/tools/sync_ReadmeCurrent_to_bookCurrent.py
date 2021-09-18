@@ -20,12 +20,12 @@ from pprint import pprint
 ReadmeCurrentJsonFilename = "README_current.json"
 BookCurrentJsonFilename = "book_current.json"
 
-# Speical: only use crifan.github.io, not use book.crifan.com/books
+# Speical: only use crifan.github.io, not use book.crifan.org/books
 OnlyUseGithubIoBookList = [
   "scientific_network_summary",
 ]
 
-BookRoot_crifan = "book.crifan.com/books"
+BookRoot_crifan = "book.crifan.org/books"
 BookRoot_github = "crifan.github.io"
 
 ################################################################################
@@ -110,12 +110,12 @@ curBookRootPrefix = "https://%s/%s" % (curBookRoot, gitRepoName)
 # print("curBookRootPrefix=%s" % curBookRootPrefix)
 # curBookRootPrefix=https://crifan.github.io/scientific_network_summary
 
-# PrefixTemplate = "https://book.crifan.com/books/%s/website/"
+# PrefixTemplate = "https://book.crifan.org/books/%s/website/"
 newPrefix = "%s/website/" % curBookRootPrefix
 # print("newPrefix=%s" % newPrefix)
 # newPrefix=https://crifan.github.io/scientific_network_summary/website/
 pluginsConfig["sitemap-general"]["prefix"] = newPrefix
-# UrlTemplate = "https://book.crifan.com/books/%s/pdf/%s.pdf"
+# UrlTemplate = "https://book.crifan.org/books/%s/pdf/%s.pdf"
 # newUrl = UrlTemplate % (gitRepoName, gitRepoName)
 newUrl = "%s/pdf/%s.pdf" % (curBookRootPrefix, gitRepoName)
 # print("newUrl=%s" % newUrl)

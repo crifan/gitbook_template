@@ -1,13 +1,13 @@
 {
   "title": "Gitbook的书名",
   "description": "gitbook书的描述",
-  "author": "Crifan Li <admin@crifan.com>",
+  "author": "Crifan Li <admin@crifan.org>",
   "language": "zh-hans",
   "gitbook": "3.2.3",
   "root": "./src",
   "links": {
     "sidebar": {
-      "主页": "http://www.crifan.com"
+      "主页": "http://www.crifan.org"
     }
   },
   "plugins": [
@@ -111,7 +111,7 @@
       ]
     },
     "tbfed-pagefooter": {
-      "copyright": "crifan.com，使用<a href='https://creativecommons.org/licenses/by/4.0/deed.zh'>署名4.0国际(CC BY 4.0)协议</a>发布",
+      "copyright": "crifan.org，使用<a href='https://creativecommons.org/licenses/by/4.0/deed.zh'>署名4.0国际(CC BY 4.0)协议</a>发布",
       "modify_label": "最后更新：",
       "modify_format": "YYYY-MM-DD HH:mm:ss"
     },
@@ -119,20 +119,20 @@
       "token": "UA-28297199-1"
     },
     "donate": {
-      "wechat": "https://www.crifan.com/files/res/crifan_com/crifan_wechat_pay.jpg",
-      "alipay": "https://www.crifan.com/files/res/crifan_com/crifan_alipay_pay.jpg",
+      "wechat": "https://www.crifan.org/files/res/crifan_com/crifan_wechat_pay.jpg",
+      "alipay": "https://www.crifan.org/files/res/crifan_com/crifan_alipay_pay.jpg",
       "title": "",
       "button": "打赏",
       "alipayText": "支付宝打赏给Crifan",
       "wechatText": "微信打赏给Crifan"
     },
     "sitemap-general": {
-      "prefix": "https://book.crifan.com/books/gitbook_name/website/"
+      "prefix": "https://book.crifan.org/books/gitbook_name/website/"
     },
     "toolbar-button": {
       "icon": "fa-file-pdf-o",
       "label": "下载PDF",
-      "url": "https://book.crifan.com/books/gitbook_name/pdf/gitbook_name.pdf"
+      "url": "https://book.crifan.org/books/gitbook_name/pdf/gitbook_name.pdf"
     }
   }
 }

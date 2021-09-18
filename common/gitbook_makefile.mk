@@ -133,7 +133,7 @@ endef
 ################################################################################
 # Output current makefile info
 ################################################################################
-Author=crifan.com
+Author=crifan.org
 Version=20210916
 Function=Auto use gitbook to generated files: website/pdf/epub/mobi; upload to remote server; commit to your github.io repository
 RunHelp = Run 'make help' to see usage

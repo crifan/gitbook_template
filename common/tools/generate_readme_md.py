@@ -23,11 +23,11 @@ gReadmeOutputFilename = "README.md"
 # # for debug
 # gReadmeOutputFilename = "README_tmp_generated.md"
 
-# Speical: only use crifan.github.io, not use book.crifan.com/books
+# Speical: only use crifan.github.io, not use book.crifan.org/books
 OnlyUseGithubIoBookList = [
     "scientific_network_summary",
 ]
-BookRoot_crifan = "book.crifan.com/books"
+BookRoot_crifan = "book.crifan.org/books"
 BookRoot_github = "crifan.github.io"
 
 ################################################################################
@@ -108,7 +108,7 @@ def generateReadmeMd():
     if gitRepoName in OnlyUseGithubIoBookList:
         print("Speical process for book: %s" % gitRepoName)
         # (1) remove line:
-        # * [科学上网相关知识总结 book.crifan.com](https://book.crifan.com/books/scientific_network_summary/website)
+        # * [科学上网相关知识总结 book.crifan.org](https://book.crifan.org/books/scientific_network_summary/website)
         # print("before: readmeTemplateMdStr=%s" % readmeTemplateMdStr)
         # onlineReadBookCrifanLinePattern = "^ \*.+?book\.crifan\.com\]\(.+?$"
         onlineReadBookCrifanLinePattern = "^\*.+?book\.crifan\.com\]\(.+?$\n"
@@ -118,7 +118,7 @@ def generateReadmeMd():
         # print("after remove read online crifan book: readmeTemplateMdStr=%s" % readmeTemplateMdStr)
 
         # (2) replace book path
-        # book.crifan.com/books -> crifan.github.io
+        # book.crifan.org/books -> crifan.github.io
         BookRootCrifanPattern = BookRoot_crifan.replace(".", "\.")
         BookRootGithubPattern = BookRoot_github
         readmeTemplateMdStr = re.sub(BookRootCrifanPattern, BookRootGithubPattern, readmeTemplateMdStr)
